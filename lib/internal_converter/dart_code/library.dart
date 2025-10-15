@@ -1,0 +1,43 @@
+import 'dart:io';
+
+import 'package:dart_code/dart_code.dart';
+import 'package:xsd_to_dart_code/internal_converter/xsd/schema.dart';
+
+class LibraryFromXsd extends Library {
+  final Schema schema;
+
+  LibraryFromXsd({
+    super.name,
+    super.docComments,
+    super.annotations,
+    super.functions,
+    super.classes,
+    super.enumerations,
+    super.typeDefs,
+    required this.schema,
+  });
+
+  @override
+  LibraryFromXsd copyWith({
+    String? name,
+    List<DocComment>? docComments,
+    List<Annotation>? annotations,
+    List<DartFunction>? functions,
+    List<Class>? classes,
+    List<Enumeration>? enumerations,
+    List<TypeDef>? typeDefs,
+    File? xsdSourceFile,
+    Schema? schema,
+    File? xsdFile,
+  }) {
+    return LibraryFromXsd(
+      docComments: docComments ?? this.docComments,
+      annotations: annotations ?? this.annotations,
+      functions: functions ?? this.functions,
+      classes: classes ?? this.classes,
+      enumerations: enumerations ?? this.enumerations,
+      typeDefs: typeDefs ?? this.typeDefs,
+      schema: schema ?? this.schema,
+    );
+  }
+}

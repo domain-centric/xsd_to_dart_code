@@ -1,0 +1,11 @@
+{
+    "configurations": [
+        
+        {
+            "name": "Dart (bin\\xsd_to_dart_code.dart)",
+            "type": "dart",
+            "request": "launch",
+            "program": "bin\\xsd_to_dart_code.dart"
+        }
+    ]
+}
