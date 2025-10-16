@@ -7,6 +7,7 @@ import 'package:xsd_to_dart_code/internal_converter/xsd/schema.dart';
 
 class XsdSchemaToLibraryConverter implements XsdToDarConverter {
   const XsdSchemaToLibraryConverter();
+
   @override
   List<CodeModel> convertToDartCode(
     InternalConverter internalConverter,
@@ -28,8 +29,10 @@ class XsdSchemaToLibraryConverter implements XsdToDarConverter {
 
     var allCode = {...codeNestedInsideChildren, ...codeFromChildren};
 
+    var schema = xsdElement as Schema;
+
     var library = LibraryFromXsd(
-      schema: xsdElement as Schema,
+      schema: schema,
       classes: allCode.whereType<Class>().toList(),
       enumerations: allCode.whereType<Enumeration>().toList(),
     );

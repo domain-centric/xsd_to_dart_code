@@ -9,9 +9,7 @@ void main() {
   group('XsdElementToFieldConverter class', () {
     late InternalConverter converter;
     setUp(() {
-      converter = InternalConverter(
-        converters: [XsdElementToFieldConverter()],
-      );
+      converter = InternalConverter(converters: [XsdElementToFieldConverter()]);
     });
     test('xsd:attribute should return no code', () {
       var element = toSchemaElement(

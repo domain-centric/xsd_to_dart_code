@@ -5,7 +5,7 @@ import 'package:xsd_to_dart_code/internal_converter/xsd/schema.dart';
 
 class LibraryFromXsd extends Library {
   final Schema schema;
-
+  final File Function(File file)? fileNameConverter;
   LibraryFromXsd({
     super.name,
     super.docComments,
@@ -14,7 +14,9 @@ class LibraryFromXsd extends Library {
     super.classes,
     super.enumerations,
     super.typeDefs,
+    super.extensions,
     required this.schema,
+    this.fileNameConverter,
   });
 
   @override
@@ -26,9 +28,9 @@ class LibraryFromXsd extends Library {
     List<Class>? classes,
     List<Enumeration>? enumerations,
     List<TypeDef>? typeDefs,
+    List<Extension>? extensions,
     File? xsdSourceFile,
     Schema? schema,
-    File? xsdFile,
   }) {
     return LibraryFromXsd(
       docComments: docComments ?? this.docComments,
@@ -37,6 +39,7 @@ class LibraryFromXsd extends Library {
       classes: classes ?? this.classes,
       enumerations: enumerations ?? this.enumerations,
       typeDefs: typeDefs ?? this.typeDefs,
+      extensions: extensions ?? this.extensions,
       schema: schema ?? this.schema,
     );
   }

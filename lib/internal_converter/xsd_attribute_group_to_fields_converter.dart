@@ -21,7 +21,7 @@ class XsdAttributeGroupToFieldsConverter implements XsdToDarConverter {
     // is a group reference
     var ref = xsdElement.getAttribute('ref');
     if (ref != null) {
-      var schema = Schema.of(xsdElement);
+      var schema = Schema.findAsParentOf(xsdElement);
       var nameToFind = ref.split(':').last;
       var elements = schema
           .findAllElements('attributeGroup', namespace: xsdNamespaceUri)

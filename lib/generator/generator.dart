@@ -1,3 +1,4 @@
+import 'package:xsd_to_dart_code/generator/add_xml_convertion.dart';
 import 'package:xsd_to_dart_code/internal_converter/dart_code/library.dart';
 import 'package:xsd_to_dart_code/generator/add_choice_interfaces.dart';
 import 'package:xsd_to_dart_code/generator/add_constructors.dart';
@@ -32,6 +33,7 @@ class XsdToDartGenerator {
   late final steps = <XsdToDartGeneratorStep>[
     AddChoiceInterfaces(),
     AddConstructors(),
+    AddXmlConverterLibraries(outputPathConverter),
     // MergeEqualClasses(),
     // CheckIfLibraryMemberNamesAreUnique(),
     WriteResultToFile(outputPathConverter),

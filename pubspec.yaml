@@ -1,5 +1,5 @@
 name: xsd_to_dart_code
-description: A sample command-line application.
+description: A library that lets you generate dart code (like classes and enums) from an XML Schema (like an xsd file).
 version: 1.0.0
 # repository: https://github.com/my_org/my_repo
 publish_to: none  #FIXME this is for testing, remove line when using published dart_code package

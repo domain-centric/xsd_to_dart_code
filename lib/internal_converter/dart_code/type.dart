@@ -34,7 +34,7 @@ class TypeFromXsdReference extends Type implements HasTypeCode {
   ) {
     var typeAttribute = (xsdElement.getAttribute('type') ?? '');
     var namespacePrefix = typeAttribute.split(":").first;
-    var schema = Schema.of(xsdElement);
+    var schema = Schema.findAsParentOf(xsdElement);
     var namespaceUri = schema.findNameSpaceUri(namespacePrefix) ?? '';
     var typeName = _findTypeName(
       //FIXME do this at post processing when all classes are available?
@@ -52,7 +52,7 @@ class TypeFromXsdReference extends Type implements HasTypeCode {
   }
 
   factory TypeFromXsdReference.toClass(XmlElement xsdElement, Class clasz) {
-    var schema = Schema.of(xsdElement);
+    var schema = Schema.findAsParentOf(xsdElement);
     var namespaceUri = schema.targetNameSpaceUri!;
     return TypeFromXsdReference(
       clasz.name.toString(),
@@ -66,7 +66,7 @@ class TypeFromXsdReference extends Type implements HasTypeCode {
     XmlElement xsdElement,
     Enumeration enumeration,
   ) {
-    var schema = Schema.of(xsdElement);
+    var schema = Schema.findAsParentOf(xsdElement);
     var namespaceUri = schema.targetNameSpaceUri!;
     return TypeFromXsdReference(
       enumeration.name.toString(),
@@ -80,7 +80,7 @@ class TypeFromXsdReference extends Type implements HasTypeCode {
     XmlElement xsdElement,
     String libraryMemberName,
   ) {
-    var schema = Schema.of(xsdElement);
+    var schema = Schema.findAsParentOf(xsdElement);
     var namespaceUri = schema.targetNameSpaceUri!;
     return TypeFromXsdReference(
       libraryMemberName,
@@ -118,7 +118,7 @@ class TypeFromXsdReference extends Type implements HasTypeCode {
     return TypeFromXsdReference(
       name ?? this.name,
       libraryUri: libraryUri,
-      generics: generics?? const [],
+      generics: generics ?? const [],
       nullable: nullable ?? this.nullable,
       typeCode: typeCode,
       xsdElement: xsdElement,

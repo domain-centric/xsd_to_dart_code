@@ -47,6 +47,17 @@ List<String> findXsdNamePath(
   return findXsdNamePath(parent, foundXsdNames);
 }
 
+String? findXsdName(XmlElement element) {
+  var nameAttributeValue = element.getAttribute('name');
+  if (nameAttributeValue != null) {
+    return nameAttributeValue;
+  }
+  if (element.parentElement == null) {
+    return null;
+  }
+  return findXsdName(element.parentElement!);
+}
+
 /// text to identify a xsdElement (e.g. for debugging)
 String lookUpText(XmlElement xsdElement) =>
     '${xsdElement.qualifiedName} in ${findXsdNamePath(xsdElement).join('.')}';

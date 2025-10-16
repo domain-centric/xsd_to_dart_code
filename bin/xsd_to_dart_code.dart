@@ -15,7 +15,9 @@ void main(List<String> arguments) {
       .whereType<File>()
       .where((file) => file.path.endsWith('.xsd'))
       .toList();
-  List<Schema> xmlSchemas = xsdFiles.map((xsdFile) => Schema.fromFile(xsdFile)).toList();
+  List<Schema> xmlSchemas = xsdFiles
+      .map((xsdFile) => Schema.fromFile(xsdFile))
+      .toList();
 
   // var xsdFile = File(r'xsd\IEC61131_10_Ed1_0_Spc1_0.xsd');
   // var schema = Schema.fromFile(xsdFile);

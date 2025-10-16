@@ -6,7 +6,7 @@ const String xsdNamespaceUri = 'http://www.w3.org/2001/XMLSchema';
 
 /// represents a [Xml Schema Definition](https://en.wikipedia.org/wiki/XML_Schema_(W3C))
 class Schema extends XmlElement {
-  final File? xsdFile;
+  final File xsdFile;
 
   factory Schema.fromFile(File xsdFile) {
     var xmlString = xsdFile.readAsStringSync();
@@ -14,7 +14,7 @@ class Schema extends XmlElement {
     return Schema(xsdFile, document);
   }
 
-  factory Schema(File? xsdFile, XmlDocument xsdDocument) {
+  factory Schema(File xsdFile, XmlDocument xsdDocument) {
     XmlElement? element = xsdDocument
         .findElements("schema", namespace: xsdNamespaceUri)
         .firstOrNull;
@@ -25,18 +25,18 @@ class Schema extends XmlElement {
     return Schema.fromSchemaElement(xsdFile, element);
   }
 
-  factory Schema.of( XmlElement xsdElement, [File? xsdFile]) {
-    var rootElement = _findRootElement(xsdElement);
-    return Schema.fromSchemaElement(xsdFile, rootElement);
-  }
+  // factory Schema.of( XmlElement xsdElement, [File? xsdFile]) {
+  //   var rootElement = _findRootElement(xsdElement);
+  //   return Schema.fromSchemaElement(xsdFile, rootElement);
+  // }
 
   Schema.fromSchemaElement(this.xsdFile, XmlElement schema)
-    :   super(
+    : super(
         schema.name.copy(),
         List<XmlAttribute>.from(schema.attributes.map((a) => a.copy())),
         List<XmlNode>.from(schema.children.map((c) => c.copy())),
         schema.isSelfClosing,
-      ) ;
+      );
 
   String? findNameSpaceUri(String nameSpacePrefixToFind) {
     for (var attribute in attributes) {
@@ -50,13 +50,13 @@ class Schema extends XmlElement {
 
   late String? targetNameSpaceUri = getAttribute('targetNamespace');
 
-  static XmlElement _findRootElement(XmlElement xsdElement) {
+  static Schema findAsParentOf(XmlElement xsdElement) {
     /// Return the root of the tree in which this node is found, whether that's
     /// a document or another element.
     var candidate = xsdElement;
     while (candidate.parentElement != null) {
       candidate = candidate.parentElement!;
     }
-    return candidate;
+    return candidate as Schema;
   }
 }

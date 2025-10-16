@@ -12,15 +12,20 @@ class WriteResultToFile implements XsdToDartGeneratorStep {
   @override
   List<LibraryFromXsd> process(List<LibraryFromXsd> libraries) {
     for (var library in libraries) {
-      var dartFile = outputPathConverter.convertToDartFile(
-        library.schema.xsdFile!,
-      );
-
-      dartFile.createSync(recursive: true);
-      dartFile.writeAsStringSync(library.toFormattedString());
+      File file = dartFile(outputPathConverter, library);
+      file.createSync(recursive: true);
+      file.writeAsStringSync(library.toFormattedString());
     }
     return libraries;
   }
+}
+
+File dartFile(OutputPathConverter outputPathConverter, LibraryFromXsd library) {
+  var dartFile = outputPathConverter.convertToDartFile(library.schema.xsdFile);
+  if (library.fileNameConverter != null) {
+    dartFile = library.fileNameConverter!(dartFile);
+  }
+  return dartFile;
 }
 
 abstract class OutputPathConverter {
