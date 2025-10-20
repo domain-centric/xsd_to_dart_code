@@ -1,39 +1,6 @@
 import 'package:dart_code/dart_code.dart';
 import 'package:xml/xml.dart';
 
-// Enumeration? createEnumerationFromXsdElement(
-//   NamePathMapper namePathMapper,
-//   XmlElement xsdElement,
-// ) {
-//   var name = findTypeName(namePathMapper, xsdElement);
-
-//   var enumerationElements = xsdElement
-//       .findAllElements('enumeration', namespace: xsdNamespaceUri)
-//       .toList();
-//   if (enumerationElements.isEmpty) {
-//     throw ArgumentError('restriction does not have any enumeration children');
-//   }
-
-//   var enumValues = <EnumerationValueFromXsd>{};
-//   for (var enumElement in enumerationElements) {
-//     var xmlEnumValue = enumElement.getAttribute('value');
-//     var dartEnumValue = toValidDartNameStartingWitLowerCase(
-//       xmlEnumValue ?? '',
-//     ).toString();
-//     var enumValue = EnumerationValueFromXsd(
-//       xmlValue: xmlEnumValue!,
-//       dartValue: dartEnumValue,
-//     );
-//     enumValues.add(enumValue);
-//   }
-
-//   if (enumValues.isEmpty) {
-//     throw ArgumentError('No valid enumeration values found');
-//   }
-
-//   return EnumerationFromXsd(name, enumValues, xsdElement);
-// }
-
 class EnumerationFromXsd extends Enumeration {
   final XmlElement xsdElement;
 
@@ -47,6 +14,28 @@ class EnumerationFromXsd extends Enumeration {
     super.constructor,
     super.methods,
   });
+
+  EnumerationFromXsd copyWith({
+    String? name,
+    Set<EnumValue>? values,
+    XmlElement? xsdElement,
+    List<DocComment>? docComments,
+    List<Annotation>? annotations,
+    List<Type>? implements,
+    Constructor? constructor,
+    List<Method>? methods,
+  }) {
+    return EnumerationFromXsd(
+      name ?? this.name.toString(),
+      values ?? this.values,
+      xsdElement ?? this.xsdElement,
+      docComments: docComments ?? this.docComments,
+      annotations: annotations ?? this.annotations,
+      implements: implements ?? this.implements,
+      constructor: constructor ?? this.constructor,
+      methods: methods ?? this.methods,
+    );
+  }
 }
 
 /// convenience class for XML conversion

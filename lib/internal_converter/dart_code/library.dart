@@ -44,3 +44,8 @@ class LibraryFromXsd extends Library {
     );
   }
 }
+
+LibraryFromXsd findLibrary(
+  List<LibraryFromXsd> libraries,
+  String nameSpaceUri,
+) => libraries.firstWhere((l) => l.schema.targetNameSpaceUri == nameSpaceUri);

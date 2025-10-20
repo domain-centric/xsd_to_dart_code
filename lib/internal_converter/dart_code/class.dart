@@ -1,9 +1,12 @@
+import 'package:collection/collection.dart';
 import 'package:dart_code/dart_code.dart';
 import 'package:xml/xml.dart';
 import 'package:xsd_to_dart_code/internal_converter/dart_code/field.dart';
+import 'package:xsd_to_dart_code/internal_converter/dart_code/library.dart';
 import 'package:xsd_to_dart_code/internal_converter/dart_code/type.dart';
 import 'package:xsd_to_dart_code/internal_converter/internal_converter.dart';
 import 'package:xsd_to_dart_code/internal_converter/xsd/name.dart';
+import 'package:xsd_to_dart_code/logger/logger.dart';
 
 /// This class is a placeholder for a class that needs to be post-processed
 /// to add the correct superclass and constructor.
@@ -193,4 +196,51 @@ TypeFromXsdChoice? findTypeFromXsdChoice(Iterable<CodeModel> codeFromChildren) {
     return null;
   }
   return allChoices.first;
+}
+
+List<ClassFromXsd> findSuperClasses(
+  ClassFromXsd clasz,
+  List<LibraryFromXsd> libraries,
+) {
+  if (clasz.superClass == null) {
+    return [];
+  }
+  var superClass = findClass(
+    clasz.superClass! as TypeFromXsdReference,
+    libraries,
+  );
+  return findSuperClassesRecursively([superClass], libraries);
+}
+
+List<ClassFromXsd> findSuperClassesRecursively(
+  List<ClassFromXsd> foundSuperClasses,
+  List<LibraryFromXsd> libraries,
+) {
+  var last = foundSuperClasses.last;
+  if (last.superClass == null) {
+    return foundSuperClasses;
+  }
+  var superClass = findClass(
+    last.superClass! as TypeFromXsdReference,
+    libraries,
+  );
+  foundSuperClasses.add(superClass);
+  return findSuperClassesRecursively(foundSuperClasses, libraries);
+}
+
+ClassFromXsd findClass(
+  TypeFromXsdReference classToFind,
+  List<LibraryFromXsd> libraries,
+) {
+  var nameSpaceUri = classToFind.namespaceUri;
+  var library = findLibrary(libraries, nameSpaceUri);
+  var foundClass = (library.classes ?? []).firstWhereOrNull(
+    (c) => c.name.toString() == classToFind.name,
+  );
+  if (foundClass == null) {
+    log.warning('Could not find class: ${classToFind.name}');
+    return library.classes?.first
+        as ClassFromXsd; //FIXME remove this temporary fix
+  }
+  return foundClass as ClassFromXsd;
 }

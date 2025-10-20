@@ -103,14 +103,18 @@ class TypeFromXsdReference extends Type implements HasTypeCode {
               e.getAttribute('name') == nameToFind &&
               e.getAttribute('type') == null,
         );
-    if (elements.length != 1) {
-      log.warning(
-        '${lookUpText(xsdElement)}: could not determine name: $nameToFind',
-      );
-      return 'Object';
-    } else {
+    if (elements.length == 1) {
       return findTypeName(namePathMapper, elements.first);
     }
+    if (elements.length > 1) {
+      var map = {for (var e in elements) findXsdNamePath(e).length: e};
+      var minLength = map.keys.reduce((a, b) => a < b ? a : b);
+      return findTypeName(namePathMapper, map[minLength]!);
+    }
+    log.warning(
+      '${lookUpText(xsdElement)}: could not determine name: $nameToFind',
+    );
+    return 'Object';
   }
 
   @override

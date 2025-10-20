@@ -26,6 +26,8 @@ class FieldFromXsd extends Field implements HasTypeCode {
   late final List<CodeModel> typeCode = findAllTypes(
     type,
   ).whereType<HasTypeCode>().map((t) => t.typeCode).expand((c) => c).toList();
+
+  late final bool isNullable = (type is Type) && (type as Type).nullable;
 }
 
 enum FieldSource {
@@ -33,7 +35,7 @@ enum FieldSource {
   attribute;
 
   static FieldSource of(XmlElement xsdElement) =>
-      xsdElement.name.local == 'element' ? element : attribute;
+      xsdElement.name.local == 'attribute' ? attribute : element;
 }
 
 FieldFromXsd createFieldFromXsdElement(
@@ -104,11 +106,13 @@ Type? _createTypeFromExpression(
   bool isNullable,
 ) {
   var typeExpression = typeAttribute.split(":").last;
-  var type = internalConverter.simpleTypeMapper.convert(
+  var converter = internalConverter.simpleTypeConverters.findForXsdType(
     typeExpression,
-    isNullable: isNullable,
   );
-  return type;
+  if (converter == null) {
+    return null;
+  }
+  return converter.dartType.copyWith(nullable: isNullable);
 }
 
 Type _createFieldTypeFromChild(

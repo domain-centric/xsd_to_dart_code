@@ -1,4 +1,4 @@
-import 'package:xsd_to_dart_code/generator/add_xml_convertion.dart';
+import 'package:xsd_to_dart_code/generator/add_xml_methods.dart';
 import 'package:xsd_to_dart_code/internal_converter/dart_code/library.dart';
 import 'package:xsd_to_dart_code/generator/add_choice_interfaces.dart';
 import 'package:xsd_to_dart_code/generator/add_constructors.dart';
@@ -7,7 +7,7 @@ import 'package:xsd_to_dart_code/internal_converter/internal_converter.dart';
 import 'package:xsd_to_dart_code/internal_converter/plural.dart';
 import 'package:xsd_to_dart_code/internal_converter/xsd/name.dart';
 import 'package:xsd_to_dart_code/internal_converter/xsd/schema.dart';
-import 'package:xsd_to_dart_code/internal_converter/xsd/simple_type_mapper.dart';
+import 'package:xsd_to_dart_code/internal_converter/xsd/simple_type_converter.dart';
 
 abstract class XsdToDartGeneratorStep {
   List<LibraryFromXsd> process(List<LibraryFromXsd> libraries);
@@ -15,25 +15,27 @@ abstract class XsdToDartGeneratorStep {
 
 class XsdToDartGenerator {
   final OutputPathConverter outputPathConverter;
-  final SimpleTypeMapper simpleTypeMapper;
   final NamePathMapper namePathMapper;
   final XsdPluralConverter pluralConverter;
+  final SimpleTypeConverters simpleTypeConverters;
   final List<XsdToDarConverter> converters;
 
   XsdToDartGenerator({
-    this.simpleTypeMapper = const DefaultSimpleTypeMapper(),
     this.namePathMapper = const DefaultNamePathMapper(),
     this.converters = defaultConverters,
     XsdPluralConverter? pluralConverter,
+    SimpleTypeConverters? simpleTypeConverters,
     OutputPathConverter? outputPathConverter,
   }) : pluralConverter = pluralConverter ?? XsdPluralConverter(),
        outputPathConverter = outputPathConverter ??=
-           DefaultOutputPathConverter();
+           DefaultOutputPathConverter(),
+       simpleTypeConverters =
+           simpleTypeConverters ?? DefaultSimpleTypeConverters();
 
   late final steps = <XsdToDartGeneratorStep>[
     AddChoiceInterfaces(),
     AddConstructors(),
-    AddXmlConverterLibraries(outputPathConverter),
+    AddXmlMethods(outputPathConverter, simpleTypeConverters),
     // MergeEqualClasses(),
     // CheckIfLibraryMemberNamesAreUnique(),
     WriteResultToFile(outputPathConverter),
@@ -44,7 +46,7 @@ class XsdToDartGenerator {
       converters: converters,
       namePathMapper: namePathMapper,
       pluralConverter: pluralConverter,
-      simpleTypeMapper: simpleTypeMapper,
+      simpleTypeConverters: simpleTypeConverters,
     );
     List<LibraryFromXsd> libraries = [];
     for (var schema in schemas) {

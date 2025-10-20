@@ -18,7 +18,7 @@ import 'package:xsd_to_dart_code/internal_converter/xsd_simple_type_converter.da
 import 'package:xsd_to_dart_code/internal_converter/xsd_union_converter.dart';
 import 'package:xsd_to_dart_code/logger/logger.dart';
 import 'package:xsd_to_dart_code/internal_converter/xsd/name.dart';
-import 'package:xsd_to_dart_code/internal_converter/xsd/simple_type_mapper.dart';
+import 'package:xsd_to_dart_code/internal_converter/xsd/simple_type_converter.dart';
 
 abstract class XsdToDarConverter {
   /// Converts an Xml schema element to one or more Dart code artifacts
@@ -51,17 +51,19 @@ const defaultConverters = <XsdToDarConverter>[
 /// converts (almost) any Xsd element in a xml schema to dart code
 /// by delegating the work to its internal [converters]
 class InternalConverter {
-  final SimpleTypeMapper simpleTypeMapper;
   final NamePathMapper namePathMapper;
   final XsdPluralConverter pluralConverter;
   final List<XsdToDarConverter> converters;
+  final SimpleTypeConverters simpleTypeConverters;
 
   InternalConverter({
-    this.simpleTypeMapper = const DefaultSimpleTypeMapper(),
     this.namePathMapper = const DefaultNamePathMapper(),
     this.converters = defaultConverters,
+    SimpleTypeConverters? simpleTypeConverters,
     XsdPluralConverter? pluralConverter,
-  }) : pluralConverter = pluralConverter ?? XsdPluralConverter();
+  }) : pluralConverter = pluralConverter ?? XsdPluralConverter(),
+       simpleTypeConverters = simpleTypeConverters ??=
+           DefaultSimpleTypeConverters();
 
   List<CodeModel> convertToDartCode(XmlElement xsdElement) {
     for (var converter in converters) {

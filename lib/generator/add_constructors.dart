@@ -1,10 +1,7 @@
-import 'package:collection/collection.dart';
 import 'package:dart_code/dart_code.dart';
 import 'package:xsd_to_dart_code/generator/generator.dart';
 import 'package:xsd_to_dart_code/internal_converter/dart_code/class.dart';
 import 'package:xsd_to_dart_code/internal_converter/dart_code/library.dart';
-import 'package:xsd_to_dart_code/internal_converter/dart_code/type.dart';
-import 'package:xsd_to_dart_code/logger/logger.dart';
 
 class AddConstructors implements XsdToDartGeneratorStep {
   @override
@@ -36,58 +33,6 @@ class AddConstructors implements XsdToDartGeneratorStep {
     }
     return newClasses;
   }
-
-  List<ClassFromXsd> findSuperClasses(
-    ClassFromXsd clasz,
-    List<LibraryFromXsd> libraries,
-  ) {
-    if (clasz.superClass == null) {
-      return [];
-    }
-    var superClass = findClass(
-      clasz.superClass! as TypeFromXsdReference,
-      libraries,
-    );
-    return findSuperClassesRecursively([superClass], libraries);
-  }
-
-  List<ClassFromXsd> findSuperClassesRecursively(
-    List<ClassFromXsd> foundSuperClasses,
-    List<LibraryFromXsd> libraries,
-  ) {
-    var last = foundSuperClasses.last;
-    if (last.superClass == null) {
-      return foundSuperClasses;
-    }
-    var superClass = findClass(
-      last.superClass! as TypeFromXsdReference,
-      libraries,
-    );
-    foundSuperClasses.add(superClass);
-    return findSuperClassesRecursively(foundSuperClasses, libraries);
-  }
-
-  ClassFromXsd findClass(
-    TypeFromXsdReference classToFind,
-    List<LibraryFromXsd> libraries,
-  ) {
-    var nameSpaceUri = classToFind.namespaceUri;
-    var library = findLibrary(libraries, nameSpaceUri);
-    var foundClass = (library.classes ?? []).firstWhereOrNull(
-      (c) => c.name.toString() == classToFind.name,
-    );
-    if (foundClass == null) {
-      log.warning('Could not find class: ${classToFind.name}');
-      return library.classes?.first
-          as ClassFromXsd; //FIXME remove this temporary fix
-    }
-    return foundClass as ClassFromXsd;
-  }
-
-  LibraryFromXsd findLibrary(
-    List<LibraryFromXsd> libraries,
-    String nameSpaceUri,
-  ) => libraries.firstWhere((l) => l.schema.targetNameSpaceUri == nameSpaceUri);
 
   Constructor? createConstructor(
     List<LibraryFromXsd> libraries,
