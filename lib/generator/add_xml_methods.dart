@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:change_case/change_case.dart';
 import 'package:collection/collection.dart';
 import 'package:dart_code/dart_code.dart';
 import 'package:xml/xml.dart';
@@ -145,7 +144,7 @@ class AddXmlMethods implements XsdToDartGeneratorStep {
       );
     }
 
-    var enumerator = findEnumeration(libraries, attributeField.xsdElement);
+    var enumerator = findEnumeration(libraries, attributeField.type as Type);
     if (enumerator != null) {
       return createToXmlEnumerationExpression(
         enumerator,
@@ -310,23 +309,13 @@ class AddXmlMethods implements XsdToDartGeneratorStep {
 
   EnumerationFromXsd? findEnumeration(
     List<LibraryFromXsd> libraries,
-    XmlElement xsdElement,
+    Type typeToFind,
   ) {
-    var typeExpression = xsdElement.getAttribute('type');
-    if (typeExpression == null) {
-      //try name
-      var name = xsdElement.getAttribute('name');
-      if (name == null) {
-        return null;
-      }
-      typeExpression = name;
-    }
     //TODO handle namespaces?
-    var typeName = typeExpression.split(':').last;
     for (var library in libraries) {
       var enums = (library.enumerations ?? []).cast<EnumerationFromXsd>();
       var enumeration = enums.firstWhereOrNull(
-        (e) => findXsdName(e.xsdElement) == typeName,
+        (e) => e.name.toString() == typeToFind.name,
       );
       if (enumeration != null) {
         return enumeration;
