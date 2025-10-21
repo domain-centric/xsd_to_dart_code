@@ -72,7 +72,7 @@ class AddDataInfo {
   final List<Info>? info;
   AddDataInfo({this.info});
   i1.XmlNode toXml() => i1.XmlElement(i1.XmlName('AddDataInfo'), [], [
-    if (info != null) ...info!.map((e) => e!.toXml()),
+    if (info != null) ...info!.map((e) => e.toXml()),
   ]);
 }
 
@@ -108,7 +108,7 @@ class GlobalNamespace extends TextualObjectBase {
     if (usingDirectives != null) ...usingDirectives!.map((e) => i1.XmlText(e!)),
     if (documentation != null) documentation!.toXml(),
     if (addData != null) addData!.toXml(),
-    if (items != null) ...items!.map((e) => e!.toXml()),
+    if (items != null) ...items!.map((e) => e.toXml()),
   ]);
 }
 
@@ -121,7 +121,7 @@ class Instances {
   final List<Configuration>? configurations;
   Instances({this.configurations});
   i1.XmlNode toXml() => i1.XmlElement(i1.XmlName('Instances'), [], [
-    if (configurations != null) ...configurations!.map((e) => e!.toXml()),
+    if (configurations != null) ...configurations!.map((e) => e.toXml()),
   ]);
 }
 
@@ -144,7 +144,7 @@ class Configuration extends TextualObjectBase {
         ...usingDirectives!.map((e) => i1.XmlText(e!)),
       if (documentation != null) documentation!.toXml(),
       if (addData != null) addData!.toXml(),
-      if (resources != null) ...resources!.map((e) => e!.toXml()),
+      if (resources != null) ...resources!.map((e) => e.toXml()),
     ],
   );
 }
@@ -173,7 +173,7 @@ class Resource extends TextualObjectBase {
         ...usingDirectives!.map((e) => i1.XmlText(e!)),
       if (documentation != null) documentation!.toXml(),
       if (addData != null) addData!.toXml(),
-      if (globalVars != null) ...globalVars!.map((e) => e!.toXml()),
+      if (globalVars != null) ...globalVars!.map((e) => e.toXml()),
     ],
   );
 }
@@ -262,7 +262,7 @@ class NamespaceDecl extends NamespaceContentBase
         ...usingDirectives!.map((e) => i1.XmlText(e!)),
       if (documentation != null) documentation!.toXml(),
       if (addData != null) addData!.toXml(),
-      if (items != null) ...items!.map((e) => e!.toXml()),
+      if (items != null) ...items!.map((e) => e.toXml()),
     ],
   );
 }
@@ -308,7 +308,7 @@ class ArrayTypeSpec extends InstantlyDefinableTypeSpecBase {
   @override
   i1.XmlNode toXml() => i1.XmlElement(i1.XmlName('ArrayTypeSpec'), [], [
     baseType.toXml(),
-    ...dimensionSpecs.map((e) => e!.toXml()),
+    ...dimensionSpecs.map((e) => e.toXml()),
     if (addData != null) addData!.toXml(),
   ]);
 }
@@ -342,7 +342,7 @@ class EnumTypeSpec extends TypeSpecBase {
   EnumTypeSpec({required this.enumerators, this.addData});
   @override
   i1.XmlNode toXml() => i1.XmlElement(i1.XmlName('EnumTypeSpec'), [], [
-    ...enumerators.map((e) => e!.toXml()),
+    ...enumerators.map((e) => e.toXml()),
     if (addData != null) addData!.toXml(),
   ]);
 }
@@ -370,7 +370,7 @@ class EnumTypeWithNamedValueSpec extends TypeSpecBase {
   @override
   i1.XmlNode toXml() =>
       i1.XmlElement(i1.XmlName('EnumTypeWithNamedValueSpec'), [], [
-        ...enumerators.map((e) => e!.toXml()),
+        ...enumerators.map((e) => e.toXml()),
         baseType.toXml(),
         if (addData != null) addData!.toXml(),
       ]);
@@ -403,7 +403,7 @@ class StructTypeSpec extends TypeSpecBase {
       if (overlap != null)
         i1.XmlAttribute(i1.XmlName('overlap'), overlap!.toString()),
     ],
-    [...members.map((e) => e!.toXml()), if (addData != null) addData!.toXml()],
+    [...members.map((e) => e.toXml()), if (addData != null) addData!.toXml()],
   );
 }
 
@@ -429,8 +429,8 @@ class Program extends NamespaceContentBase implements GlobalNamespaceItem {
         ...usingDirectives!.map((e) => i1.XmlText(e!)),
       if (documentation != null) documentation!.toXml(),
       if (addData != null) addData!.toXml(),
-      if (externalVars != null) ...externalVars!.map((e) => e!.toXml()),
-      if (vars != null) ...vars!.map((e) => e!.toXml()),
+      if (externalVars != null) ...externalVars!.map((e) => e.toXml()),
+      if (vars != null) ...vars!.map((e) => e.toXml()),
       mainBody.toXml(),
     ],
   );
@@ -462,8 +462,8 @@ class FunctionBlock extends NamespaceContentBase
       if (documentation != null) documentation!.toXml(),
       if (addData != null) addData!.toXml(),
       if (parameters != null) parameters!.toXml(),
-      if (externalVars != null) ...externalVars!.map((e) => e!.toXml()),
-      if (vars != null) ...vars!.map((e) => e!.toXml()),
+      if (externalVars != null) ...externalVars!.map((e) => e.toXml()),
+      if (vars != null) ...vars!.map((e) => e.toXml()),
       mainBody.toXml(),
     ],
   );
@@ -498,8 +498,8 @@ class Function$ extends NamespaceContentBase
       if (addData != null) addData!.toXml(),
       if (resultType != null) resultType!.toXml(),
       parameters.toXml(),
-      if (externalVars != null) ...externalVars!.map((e) => e!.toXml()),
-      if (tempVars != null) ...tempVars!.map((e) => e!.toXml()),
+      if (externalVars != null) ...externalVars!.map((e) => e.toXml()),
+      if (tempVars != null) ...tempVars!.map((e) => e.toXml()),
       mainBody.toXml(),
     ],
   );
@@ -509,7 +509,7 @@ class ParameterSet {
   final List<ParameterSetItem>? items;
   ParameterSet({this.items});
   i1.XmlNode toXml() => i1.XmlElement(i1.XmlName('ParameterSet'), [], [
-    if (items != null) ...items!.map((e) => e!.toXml()),
+    if (items != null) ...items!.map((e) => e.toXml()),
   ]);
 }
 
@@ -523,7 +523,7 @@ class InoutVars implements ParameterSetItem {
   InoutVars({this.variables});
   @override
   i1.XmlNode toXml() => i1.XmlElement(i1.XmlName('InoutVars'), [], [
-    if (variables != null) ...variables!.map((e) => e!.toXml()),
+    if (variables != null) ...variables!.map((e) => e.toXml()),
   ]);
 }
 
@@ -575,7 +575,7 @@ class InputVars implements ParameterSetItem {
       if (nonRetain != null)
         i1.XmlAttribute(i1.XmlName('non_retain'), nonRetain!.toString()),
     ],
-    [if (variables != null) ...variables!.map((e) => e!.toXml())],
+    [if (variables != null) ...variables!.map((e) => e.toXml())],
   );
 }
 
@@ -635,7 +635,7 @@ class OutputVars implements ParameterSetItem {
       if (nonRetain != null)
         i1.XmlAttribute(i1.XmlName('non_retain'), nonRetain!.toString()),
     ],
-    [if (variables != null) ...variables!.map((e) => e!.toXml())],
+    [if (variables != null) ...variables!.map((e) => e.toXml())],
   );
 }
 
@@ -695,12 +695,12 @@ class VarListWithAccessSpec extends VarList {
         i1.XmlAttribute(i1.XmlName('retain'), retain!.toString()),
       if (nonRetain != null)
         i1.XmlAttribute(i1.XmlName('non_retain'), nonRetain!.toString()),
-      i1.XmlAttribute(i1.XmlName('accessSpecifier'), switch (accessSpecifier!) {
+      i1.XmlAttribute(i1.XmlName('accessSpecifier'), switch (accessSpecifier) {
         AccessSpecifiers.private => 'private',
       }),
     ],
     [
-      if (variables != null) ...variables!.map((e) => e!.toXml()),
+      if (variables != null) ...variables!.map((e) => e.toXml()),
       if (usingDirectives != null)
         ...usingDirectives!.map((e) => i1.XmlText(e!)),
       if (documentation != null) documentation!.toXml(),
@@ -722,7 +722,7 @@ class Body extends TextualObjectBase {
     if (usingDirectives != null) ...usingDirectives!.map((e) => i1.XmlText(e!)),
     if (documentation != null) documentation!.toXml(),
     if (addData != null) addData!.toXml(),
-    ...bodyContents.map((e) => e!.toXml()),
+    ...bodyContents.map((e) => e.toXml()),
   ]);
 }
 
@@ -739,7 +739,7 @@ class BodyWithoutSFC extends TextualObjectBase {
     if (usingDirectives != null) ...usingDirectives!.map((e) => i1.XmlText(e!)),
     if (documentation != null) documentation!.toXml(),
     if (addData != null) addData!.toXml(),
-    ...bodyContents.map((e) => e!.toXml()),
+    ...bodyContents.map((e) => e.toXml()),
   ]);
 }
 
@@ -773,7 +773,7 @@ class VarList extends TextualObjectBase {
         ...usingDirectives!.map((e) => i1.XmlText(e!)),
       if (documentation != null) documentation!.toXml(),
       if (addData != null) addData!.toXml(),
-      if (variables != null) ...variables!.map((e) => e!.toXml()),
+      if (variables != null) ...variables!.map((e) => e.toXml()),
     ],
   );
 }
@@ -800,7 +800,7 @@ class ExternalVarList extends TextualObjectBase {
         ...usingDirectives!.map((e) => i1.XmlText(e!)),
       if (documentation != null) documentation!.toXml(),
       if (addData != null) addData!.toXml(),
-      if (variables != null) ...variables!.map((e) => e!.toXml()),
+      if (variables != null) ...variables!.map((e) => e.toXml()),
     ],
   );
 }
@@ -983,7 +983,7 @@ class LD extends ProgrammingLanguageBase {
   LD({this.rungs});
   @override
   i1.XmlNode toXml() => i1.XmlElement(i1.XmlName('LD'), [], [
-    if (rungs != null) ...rungs!.map((e) => e!.toXml()),
+    if (rungs != null) ...rungs!.map((e) => e.toXml()),
   ]);
 }
 
@@ -1009,7 +1009,7 @@ class LadderRung extends NetworkBase {
     [
       if (documentation != null) documentation!.toXml(),
       if (addData != null) addData!.toXml(),
-      if (items != null) ...items!.map((e) => e!.toXml()),
+      if (items != null) ...items!.map((e) => e.toXml()),
     ],
   );
 }
@@ -1067,7 +1067,7 @@ class InOutVariables {
   final List<InOutVariable>? inOutVariables;
   InOutVariables({this.inOutVariables});
   i1.XmlNode toXml() => i1.XmlElement(i1.XmlName('InOutVariables'), [], [
-    if (inOutVariables != null) ...inOutVariables!.map((e) => e!.toXml()),
+    if (inOutVariables != null) ...inOutVariables!.map((e) => e.toXml()),
   ]);
 }
 
@@ -1105,7 +1105,7 @@ class InputVariables {
   final List<InputVariable>? inputVariables;
   InputVariables({this.inputVariables});
   i1.XmlNode toXml() => i1.XmlElement(i1.XmlName('InputVariables'), [], [
-    if (inputVariables != null) ...inputVariables!.map((e) => e!.toXml()),
+    if (inputVariables != null) ...inputVariables!.map((e) => e.toXml()),
   ]);
 }
 
@@ -1152,7 +1152,7 @@ class OutputVariables {
   final List<OutputVariable>? outputVariables;
   OutputVariables({this.outputVariables});
   i1.XmlNode toXml() => i1.XmlElement(i1.XmlName('OutputVariables'), [], [
-    if (outputVariables != null) ...outputVariables!.map((e) => e!.toXml()),
+    if (outputVariables != null) ...outputVariables!.map((e) => e.toXml()),
   ]);
 }
 
@@ -1258,7 +1258,7 @@ class LeftPowerRail extends LdObjectBase {
     if (documentation != null) documentation!.toXml(),
     if (addData != null) addData!.toXml(),
     if (connectionPointOuts != null)
-      ...connectionPointOuts!.map((e) => e!.toXml()),
+      ...connectionPointOuts!.map((e) => e.toXml()),
   ]);
 }
 
@@ -1270,7 +1270,7 @@ class RightPowerRail extends LdObjectBase {
     if (documentation != null) documentation!.toXml(),
     if (addData != null) addData!.toXml(),
     if (connectionPointIns != null)
-      ...connectionPointIns!.map((e) => e!.toXml()),
+      ...connectionPointIns!.map((e) => e.toXml()),
   ]);
 }
 
@@ -1365,7 +1365,7 @@ class ConnectionPointIn extends IdentifiedObjectBase {
   i1.XmlNode toXml() => i1.XmlElement(i1.XmlName('ConnectionPointIn'), [], [
     if (documentation != null) documentation!.toXml(),
     if (addData != null) addData!.toXml(),
-    if (connections != null) ...connections!.map((e) => e!.toXml()),
+    if (connections != null) ...connections!.map((e) => e.toXml()),
   ]);
 }
 
@@ -1429,7 +1429,7 @@ class AddData {
   final List<Data>? data;
   AddData({this.data});
   i1.XmlNode toXml() => i1.XmlElement(i1.XmlName('AddData'), [], [
-    if (data != null) ...data!.map((e) => e!.toXml()),
+    if (data != null) ...data!.map((e) => e.toXml()),
   ]);
 }
 
@@ -1439,7 +1439,7 @@ class Data {
   Data({required this.name, required this.handleUnknown});
   i1.XmlNode toXml() => i1.XmlElement(i1.XmlName('Data'), [
     i1.XmlAttribute(i1.XmlName('name'), name.toString()),
-    i1.XmlAttribute(i1.XmlName('handleUnknown'), switch (handleUnknown!) {
+    i1.XmlAttribute(i1.XmlName('handleUnknown'), switch (handleUnknown) {
       HandleUnknown.discard => 'discard',
     }),
   ], []);

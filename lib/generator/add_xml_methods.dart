@@ -146,9 +146,13 @@ class AddXmlMethods implements XsdToDartGeneratorStep {
 
     var enumerator = findEnumeration(libraries, attributeField.type as Type);
     if (enumerator != null) {
+      var valueExpression = Expression.ofVariable(attributeField.name);
+      if (attributeField.isNullable) {
+        valueExpression = valueExpression.assertNotNull();
+      }
       return createToXmlEnumerationExpression(
         enumerator,
-        Expression.ofVariable(attributeField.name).assertNotNull(),
+        valueExpression,
         wrapInXmlText: false,
       );
     }
@@ -177,9 +181,12 @@ class AddXmlMethods implements XsdToDartGeneratorStep {
     }
 
     if (xsdElementIsList(field.xsdElement)) {
-      var typeConverter = createTypeConverter(
-        (field.type as Type).generics.first,
-      );
+      var type = (field.type as Type).generics.first;
+      var typeConverter = createTypeConverter(type);
+      var valueExpression = Expression.ofVariable('e');
+      if (type.nullable) {
+        valueExpression = valueExpression.assertNotNull();
+      }
       code.add(
         Expression([
           Code('...'),
@@ -189,7 +196,7 @@ class AddXmlMethods implements XsdToDartGeneratorStep {
               ParameterValue(
                 Expression([
                   Code(
-                    '(e)=>${typeConverter.toXmlCode(Expression.ofVariable('e').assertNotNull(), false)}',
+                    '(e)=>${typeConverter.toXmlCode(valueExpression, false)}',
                   ),
                 ]),
               ),
