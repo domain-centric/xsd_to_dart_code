@@ -320,7 +320,7 @@ class DimensionSpec {
       i1.XmlElement(i1.XmlName('DimensionSpec'), [], [item.toXml()]);
 }
 
-/// Common interface for: [IndexRange]
+/// Common interface for: [IndexRange], [VariableLength]
 abstract interface class DimensionSpecItem {
   i1.XmlNode toXml();
 }
@@ -334,6 +334,15 @@ class IndexRange implements DimensionSpecItem {
     i1.XmlAttribute(i1.XmlName('lower'), lower),
     i1.XmlAttribute(i1.XmlName('upper'), upper),
   ], []);
+}
+
+class VariableLength implements DimensionSpecItem {
+  final bool item;
+  VariableLength({required this.item});
+  @override
+  i1.XmlNode toXml() => i1.XmlElement(i1.XmlName('VariableLength'), [], [
+    i1.XmlText(item.toString()),
+  ]);
 }
 
 class EnumTypeSpec extends TypeSpecBase {
@@ -864,9 +873,17 @@ class TypeRef {
       i1.XmlElement(i1.XmlName('TypeRef'), [], [item.toXml()]);
 }
 
-/// Common interface for: [InstantlyDefinableTypeSpecBase]
+/// Common interface for: [TypeName], [InstantlyDefinableTypeSpecBase]
 abstract interface class TypeRefItem {
   i1.XmlNode toXml();
+}
+
+class TypeName implements TypeRefItem {
+  final String item;
+  TypeName({required this.item});
+  @override
+  i1.XmlNode toXml() =>
+      i1.XmlElement(i1.XmlName('TypeName'), [], [i1.XmlText(item)]);
 }
 
 class Value {
