@@ -267,11 +267,7 @@ class AddXmlMethods implements XsdToDartGeneratorStep {
 
   Method createToXmlEnumerationMethod(EnumerationFromXsd enumerator) => Method(
     'toXml',
-    createToXmlEnumerationExpression(
-      enumerator,
-      Expression.ofThis(),
-      wrapInXmlText: true,
-    ),
+    createToXmlEnumerationElement(enumerator),
     returnType: xmlNode,
   );
 
@@ -330,6 +326,24 @@ class AddXmlMethods implements XsdToDartGeneratorStep {
     }
     return null;
   }
+
+  CodeNode createToXmlEnumerationElement(EnumerationFromXsd enumerator) =>
+      Expression.callConstructor(
+        xmlElementType,
+        parameterValues: ParameterValues([
+          createToXmlNameParameterValue(enumerator.xsdElement),
+          ParameterValue(Expression.ofList([])),
+          ParameterValue(
+            Expression.ofList([
+              createToXmlEnumerationExpression(
+                enumerator,
+                Expression.ofThis(),
+                wrapInXmlText: true,
+              ),
+            ]),
+          ),
+        ]),
+      );
 }
 
 class XmlTextConverter implements XmlTypeConverter {

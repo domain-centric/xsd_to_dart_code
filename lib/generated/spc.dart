@@ -1,4 +1,5 @@
 import 'package:xml/xml.dart' as i1;
+import 'spc.dart' as i2;
 
 class Project {
   final FileHeader fileHeader;
@@ -43,12 +44,12 @@ class FileHeader {
 
 class ContentHeader {
   final AddDataInfo? addDataInfo;
-  final AddData? addData;
+  final i2.AddData addData;
   final String name;
   final DateTime creationDateTime;
   ContentHeader({
     this.addDataInfo,
-    this.addData,
+    required this.addData,
     required this.name,
     required this.creationDateTime,
   });
@@ -61,10 +62,7 @@ class ContentHeader {
         creationDateTime.toIso8601String(),
       ),
     ],
-    [
-      if (addDataInfo != null) addDataInfo!.toXml(),
-      if (addData != null) addData!.toXml(),
-    ],
+    [if (addDataInfo != null) addDataInfo!.toXml(), addData.toXml()],
   );
 }
 
@@ -95,24 +93,24 @@ class Types {
       i1.XmlElement(i1.XmlName('Types'), [], [globalNamespace.toXml()]);
 }
 
-class GlobalNamespace extends TextualObjectBase {
+class GlobalNamespace extends i2.TextualObjectBase {
   final List<GlobalNamespaceItem>? items;
   GlobalNamespace({
     super.usingDirectives,
-    super.documentation,
-    super.addData,
+    required super.documentation,
+    required super.addData,
     this.items,
   });
   @override
   i1.XmlNode toXml() => i1.XmlElement(i1.XmlName('GlobalNamespace'), [], [
     if (usingDirectives != null) ...usingDirectives!.map((e) => i1.XmlText(e!)),
-    if (documentation != null) documentation!.toXml(),
-    if (addData != null) addData!.toXml(),
+    documentation.toXml(),
+    addData.toXml(),
     if (items != null) ...items!.map((e) => e.toXml()),
   ]);
 }
 
-/// Common interface for: [NamespaceDecl], [UserDefinedTypeDecl], [Program], [FunctionBlock], [Function$]
+/// Common interface for: [ToBeResolvedLater], [ToBeResolvedLater], [ToBeResolvedLater], [ToBeResolvedLater], [ToBeResolvedLater]
 abstract interface class GlobalNamespaceItem {
   i1.XmlNode toXml();
 }
@@ -125,13 +123,13 @@ class Instances {
   ]);
 }
 
-class Configuration extends TextualObjectBase {
+class Configuration extends i2.TextualObjectBase {
   final List<Resource>? resources;
   final String name;
   Configuration({
     super.usingDirectives,
-    super.documentation,
-    super.addData,
+    required super.documentation,
+    required super.addData,
     this.resources,
     required this.name,
   });
@@ -142,21 +140,21 @@ class Configuration extends TextualObjectBase {
     [
       if (usingDirectives != null)
         ...usingDirectives!.map((e) => i1.XmlText(e!)),
-      if (documentation != null) documentation!.toXml(),
-      if (addData != null) addData!.toXml(),
+      documentation.toXml(),
+      addData.toXml(),
       if (resources != null) ...resources!.map((e) => e.toXml()),
     ],
   );
 }
 
-class Resource extends TextualObjectBase {
-  final List<VarList>? globalVars;
+class Resource extends i2.TextualObjectBase {
+  final List<i2.VarList>? globalVars;
   final String name;
   final String resourceTypeName;
   Resource({
     super.usingDirectives,
-    super.documentation,
-    super.addData,
+    required super.documentation,
+    required super.addData,
     this.globalVars,
     required this.name,
     required this.resourceTypeName,
@@ -171,8 +169,8 @@ class Resource extends TextualObjectBase {
     [
       if (usingDirectives != null)
         ...usingDirectives!.map((e) => i1.XmlText(e!)),
-      if (documentation != null) documentation!.toXml(),
-      if (addData != null) addData!.toXml(),
+      documentation.toXml(),
+      addData.toXml(),
       if (globalVars != null) ...globalVars!.map((e) => e.toXml()),
     ],
   );
@@ -182,75 +180,74 @@ abstract class TypeSpecBase {
   i1.XmlNode toXml();
 }
 
-abstract class InstantlyDefinableTypeSpecBase extends TypeSpecBase
-    implements TypeRefItem {}
+abstract class InstantlyDefinableTypeSpecBase extends i2.TypeSpecBase {}
 
 abstract class BehaviorRepresentationBase {
   i1.XmlNode toXml();
 }
 
-abstract class ProgrammingLanguageBase extends BehaviorRepresentationBase {}
+abstract class ProgrammingLanguageBase extends i2.BehaviorRepresentationBase {}
 
 abstract class IdentifiedObjectBase {
-  final TextBase? documentation;
-  final AddData? addData;
-  IdentifiedObjectBase({this.documentation, this.addData});
+  final i2.TextBase documentation;
+  final i2.AddData addData;
+  IdentifiedObjectBase({required this.documentation, required this.addData});
   i1.XmlNode toXml();
 }
 
-abstract class GraphicalObjectBase extends IdentifiedObjectBase {
-  GraphicalObjectBase({super.documentation, super.addData});
+abstract class GraphicalObjectBase extends i2.IdentifiedObjectBase {
+  GraphicalObjectBase({required super.documentation, required super.addData});
 }
 
-abstract class CommonObjectBase extends GraphicalObjectBase
-    implements LadderRungItem {
-  CommonObjectBase({super.documentation, super.addData});
+abstract class CommonObjectBase extends i2.GraphicalObjectBase {
+  CommonObjectBase({required super.documentation, required super.addData});
 }
 
-abstract class FbdObjectBase extends GraphicalObjectBase
-    implements LadderRungItem {
-  FbdObjectBase({super.documentation, super.addData});
+abstract class FbdObjectBase extends i2.GraphicalObjectBase {
+  FbdObjectBase({required super.documentation, required super.addData});
 }
 
-abstract class LdObjectBase extends GraphicalObjectBase
-    implements LadderRungItem {
-  LdObjectBase({super.documentation, super.addData});
+abstract class LdObjectBase extends i2.GraphicalObjectBase {
+  LdObjectBase({required super.documentation, required super.addData});
 }
 
-abstract class NetworkBase extends GraphicalObjectBase {
+abstract class NetworkBase extends i2.GraphicalObjectBase {
   final String? label;
   final int evaluationOrder;
   NetworkBase({
-    super.documentation,
-    super.addData,
+    required super.documentation,
+    required super.addData,
     this.label,
     required this.evaluationOrder,
   });
 }
 
-abstract class TextualObjectBase extends IdentifiedObjectBase {
+abstract class TextualObjectBase extends i2.IdentifiedObjectBase {
   final List<String?>? usingDirectives;
-  TextualObjectBase({super.documentation, super.addData, this.usingDirectives});
+  TextualObjectBase({
+    required super.documentation,
+    required super.addData,
+    this.usingDirectives,
+  });
 }
 
-abstract class NamespaceContentBase extends TextualObjectBase {
+abstract class NamespaceContentBase extends i2.TextualObjectBase {
   final String name;
   NamespaceContentBase({
     super.usingDirectives,
-    super.documentation,
-    super.addData,
+    required super.documentation,
+    required super.addData,
     required this.name,
   });
 }
 
-class NamespaceDecl extends NamespaceContentBase
-    implements GlobalNamespaceItem, NamespaceDeclItem {
+class NamespaceDecl extends i2.NamespaceContentBase {
   final List<NamespaceDeclItem>? items;
   NamespaceDecl({
     required super.name,
     super.usingDirectives,
-    super.documentation,
-    super.addData,
+    required super.documentation,
+    required super.addData,
     this.items,
   });
   @override
@@ -260,26 +257,25 @@ class NamespaceDecl extends NamespaceContentBase
     [
       if (usingDirectives != null)
         ...usingDirectives!.map((e) => i1.XmlText(e!)),
-      if (documentation != null) documentation!.toXml(),
-      if (addData != null) addData!.toXml(),
+      documentation.toXml(),
+      addData.toXml(),
       if (items != null) ...items!.map((e) => e.toXml()),
     ],
   );
 }
 
-/// Common interface for: [NamespaceDecl], [UserDefinedTypeDecl], [FunctionBlock], [Function$]
+/// Common interface for: [ToBeResolvedLater], [ToBeResolvedLater], [ToBeResolvedLater], [ToBeResolvedLater]
 abstract interface class NamespaceDeclItem {
   i1.XmlNode toXml();
 }
 
-class UserDefinedTypeDecl extends NamespaceContentBase
-    implements GlobalNamespaceItem, NamespaceDeclItem {
-  final TypeSpecBase userDefinedTypeSpec;
+class UserDefinedTypeDecl extends i2.NamespaceContentBase {
+  final i2.TypeSpecBase userDefinedTypeSpec;
   UserDefinedTypeDecl({
     required super.name,
     super.usingDirectives,
-    super.documentation,
-    super.addData,
+    required super.documentation,
+    required super.addData,
     required this.userDefinedTypeSpec,
   });
   @override
@@ -289,27 +285,27 @@ class UserDefinedTypeDecl extends NamespaceContentBase
     [
       if (usingDirectives != null)
         ...usingDirectives!.map((e) => i1.XmlText(e!)),
-      if (documentation != null) documentation!.toXml(),
-      if (addData != null) addData!.toXml(),
+      documentation.toXml(),
+      addData.toXml(),
       userDefinedTypeSpec.toXml(),
     ],
   );
 }
 
-class ArrayTypeSpec extends InstantlyDefinableTypeSpecBase {
-  final TypeRef baseType;
+class ArrayTypeSpec extends i2.InstantlyDefinableTypeSpecBase {
+  final i2.TypeRef baseType;
   final List<DimensionSpec> dimensionSpecs;
-  final AddData? addData;
+  final i2.AddData addData;
   ArrayTypeSpec({
     required this.baseType,
     required this.dimensionSpecs,
-    this.addData,
+    required this.addData,
   });
   @override
   i1.XmlNode toXml() => i1.XmlElement(i1.XmlName('ArrayTypeSpec'), [], [
     baseType.toXml(),
     ...dimensionSpecs.map((e) => e.toXml()),
-    if (addData != null) addData!.toXml(),
+    addData.toXml(),
   ]);
 }
 
@@ -345,66 +341,69 @@ class VariableLength implements DimensionSpecItem {
   ]);
 }
 
-class EnumTypeSpec extends TypeSpecBase {
+class EnumTypeSpec extends i2.TypeSpecBase {
   final List<EnumeratorWithoutValue> enumerators;
-  final AddData? addData;
-  EnumTypeSpec({required this.enumerators, this.addData});
+  final i2.AddData addData;
+  EnumTypeSpec({required this.enumerators, required this.addData});
   @override
   i1.XmlNode toXml() => i1.XmlElement(i1.XmlName('EnumTypeSpec'), [], [
     ...enumerators.map((e) => e.toXml()),
-    if (addData != null) addData!.toXml(),
+    addData.toXml(),
   ]);
 }
 
 class EnumeratorWithoutValue {
-  final TextBase? documentation;
+  final i2.TextBase documentation;
   final String name;
-  EnumeratorWithoutValue({this.documentation, required this.name});
+  EnumeratorWithoutValue({required this.documentation, required this.name});
   i1.XmlNode toXml() => i1.XmlElement(
     i1.XmlName('Enumerator'),
     [i1.XmlAttribute(i1.XmlName('name'), name)],
-    [if (documentation != null) documentation!.toXml()],
+    [documentation.toXml()],
   );
 }
 
-class EnumTypeWithNamedValueSpec extends TypeSpecBase {
+class EnumTypeWithNamedValueSpec extends i2.TypeSpecBase {
   final List<Enumerator> enumerators;
-  final ElementaryType baseType;
-  final AddData? addData;
+  final i2.ElementaryType baseType;
+  final i2.AddData addData;
   EnumTypeWithNamedValueSpec({
     required this.enumerators,
     required this.baseType,
-    this.addData,
+    required this.addData,
   });
   @override
-  i1.XmlNode toXml() =>
-      i1.XmlElement(i1.XmlName('EnumTypeWithNamedValueSpec'), [], [
-        ...enumerators.map((e) => e.toXml()),
-        baseType.toXml(),
-        if (addData != null) addData!.toXml(),
-      ]);
+  i1.XmlNode toXml() => i1.XmlElement(
+    i1.XmlName('EnumTypeWithNamedValueSpec'),
+    [],
+    [...enumerators.map((e) => e.toXml()), baseType.toXml(), addData.toXml()],
+  );
 }
 
 class Enumerator {
-  final TextBase? documentation;
+  final i2.TextBase documentation;
   final String name;
   final String value;
-  Enumerator({this.documentation, required this.name, required this.value});
+  Enumerator({
+    required this.documentation,
+    required this.name,
+    required this.value,
+  });
   i1.XmlNode toXml() => i1.XmlElement(
     i1.XmlName('Enumerator'),
     [
       i1.XmlAttribute(i1.XmlName('name'), name),
       i1.XmlAttribute(i1.XmlName('value'), value),
     ],
-    [if (documentation != null) documentation!.toXml()],
+    [documentation.toXml()],
   );
 }
 
-class StructTypeSpec extends TypeSpecBase {
-  final List<VariableDecl> members;
-  final AddData? addData;
+class StructTypeSpec extends i2.TypeSpecBase {
+  final List<i2.VariableDecl> members;
+  final i2.AddData addData;
   final bool? overlap;
-  StructTypeSpec({required this.members, this.addData, this.overlap});
+  StructTypeSpec({required this.members, required this.addData, this.overlap});
   @override
   i1.XmlNode toXml() => i1.XmlElement(
     i1.XmlName('StructTypeSpec'),
@@ -412,19 +411,19 @@ class StructTypeSpec extends TypeSpecBase {
       if (overlap != null)
         i1.XmlAttribute(i1.XmlName('overlap'), overlap!.toString()),
     ],
-    [...members.map((e) => e.toXml()), if (addData != null) addData!.toXml()],
+    [...members.map((e) => e.toXml()), addData.toXml()],
   );
 }
 
-class Program extends NamespaceContentBase implements GlobalNamespaceItem {
-  final List<ExternalVarList>? externalVars;
-  final List<VarListWithAccessSpec>? vars;
-  final Body mainBody;
+class Program extends i2.NamespaceContentBase {
+  final List<i2.ExternalVarList>? externalVars;
+  final List<i2.VarListWithAccessSpec>? vars;
+  final i2.Body mainBody;
   Program({
     required super.name,
     super.usingDirectives,
-    super.documentation,
-    super.addData,
+    required super.documentation,
+    required super.addData,
     this.externalVars,
     this.vars,
     required this.mainBody,
@@ -436,8 +435,8 @@ class Program extends NamespaceContentBase implements GlobalNamespaceItem {
     [
       if (usingDirectives != null)
         ...usingDirectives!.map((e) => i1.XmlText(e!)),
-      if (documentation != null) documentation!.toXml(),
-      if (addData != null) addData!.toXml(),
+      documentation.toXml(),
+      addData.toXml(),
       if (externalVars != null) ...externalVars!.map((e) => e.toXml()),
       if (vars != null) ...vars!.map((e) => e.toXml()),
       mainBody.toXml(),
@@ -445,18 +444,17 @@ class Program extends NamespaceContentBase implements GlobalNamespaceItem {
   );
 }
 
-class FunctionBlock extends NamespaceContentBase
-    implements GlobalNamespaceItem, NamespaceDeclItem {
-  final ParameterSet? parameters;
-  final List<ExternalVarList>? externalVars;
-  final List<VarListWithAccessSpec>? vars;
-  final Body mainBody;
+class FunctionBlock extends i2.NamespaceContentBase {
+  final i2.ParameterSet parameters;
+  final List<i2.ExternalVarList>? externalVars;
+  final List<i2.VarListWithAccessSpec>? vars;
+  final i2.Body mainBody;
   FunctionBlock({
     required super.name,
     super.usingDirectives,
-    super.documentation,
-    super.addData,
-    this.parameters,
+    required super.documentation,
+    required super.addData,
+    required this.parameters,
     this.externalVars,
     this.vars,
     required this.mainBody,
@@ -468,9 +466,9 @@ class FunctionBlock extends NamespaceContentBase
     [
       if (usingDirectives != null)
         ...usingDirectives!.map((e) => i1.XmlText(e!)),
-      if (documentation != null) documentation!.toXml(),
-      if (addData != null) addData!.toXml(),
-      if (parameters != null) parameters!.toXml(),
+      documentation.toXml(),
+      addData.toXml(),
+      parameters.toXml(),
       if (externalVars != null) ...externalVars!.map((e) => e.toXml()),
       if (vars != null) ...vars!.map((e) => e.toXml()),
       mainBody.toXml(),
@@ -478,19 +476,18 @@ class FunctionBlock extends NamespaceContentBase
   );
 }
 
-class Function$ extends NamespaceContentBase
-    implements GlobalNamespaceItem, NamespaceDeclItem {
-  final TypeRef? resultType;
-  final ParameterSet parameters;
-  final List<ExternalVarList>? externalVars;
-  final List<VarList>? tempVars;
-  final BodyWithoutSFC mainBody;
+class Function$ extends i2.NamespaceContentBase {
+  final i2.TypeRef resultType;
+  final i2.ParameterSet parameters;
+  final List<i2.ExternalVarList>? externalVars;
+  final List<i2.VarList>? tempVars;
+  final i2.BodyWithoutSFC mainBody;
   Function$({
     required super.name,
     super.usingDirectives,
-    super.documentation,
-    super.addData,
-    this.resultType,
+    required super.documentation,
+    required super.addData,
+    required this.resultType,
     required this.parameters,
     this.externalVars,
     this.tempVars,
@@ -503,9 +500,9 @@ class Function$ extends NamespaceContentBase
     [
       if (usingDirectives != null)
         ...usingDirectives!.map((e) => i1.XmlText(e!)),
-      if (documentation != null) documentation!.toXml(),
-      if (addData != null) addData!.toXml(),
-      if (resultType != null) resultType!.toXml(),
+      documentation.toXml(),
+      addData.toXml(),
+      resultType.toXml(),
       parameters.toXml(),
       if (externalVars != null) ...externalVars!.map((e) => e.toXml()),
       if (tempVars != null) ...tempVars!.map((e) => e.toXml()),
@@ -536,16 +533,16 @@ class InoutVars implements ParameterSetItem {
   ]);
 }
 
-class ParameterInoutVariable extends VariableDecl {
+class ParameterInoutVariable extends i2.VariableDecl {
   final int orderWithinParamSet;
   ParameterInoutVariable({
-    super.initialValue,
-    super.address,
+    required super.initialValue,
+    required super.address,
     required super.type,
     required super.name,
     super.usingDirectives,
-    super.documentation,
-    super.addData,
+    required super.documentation,
+    required super.addData,
     required this.orderWithinParamSet,
   });
   @override
@@ -559,13 +556,13 @@ class ParameterInoutVariable extends VariableDecl {
       ),
     ],
     [
-      if (initialValue != null) initialValue!.toXml(),
-      if (address != null) address!.toXml(),
+      initialValue.toXml(),
+      address.toXml(),
       type.toXml(),
       if (usingDirectives != null)
         ...usingDirectives!.map((e) => i1.XmlText(e!)),
-      if (documentation != null) documentation!.toXml(),
-      if (addData != null) addData!.toXml(),
+      documentation.toXml(),
+      addData.toXml(),
     ],
   );
 }
@@ -588,19 +585,19 @@ class InputVars implements ParameterSetItem {
   );
 }
 
-class ParameterInputVariable extends VariableDecl {
+class ParameterInputVariable extends i2.VariableDecl {
   final int orderWithinParamSet;
-  final EdgeModifierType? edgeDetection;
+  final i2.EdgeModifierType edgeDetection;
   ParameterInputVariable({
-    super.initialValue,
-    super.address,
+    required super.initialValue,
+    required super.address,
     required super.type,
     required super.name,
     super.usingDirectives,
-    super.documentation,
-    super.addData,
+    required super.documentation,
+    required super.addData,
     required this.orderWithinParamSet,
-    this.edgeDetection,
+    required this.edgeDetection,
   });
   @override
   i1.XmlNode toXml() => i1.XmlElement(
@@ -611,21 +608,20 @@ class ParameterInputVariable extends VariableDecl {
         i1.XmlName('orderWithinParamSet'),
         orderWithinParamSet.toString(),
       ),
-      if (edgeDetection != null)
-        i1.XmlAttribute(i1.XmlName('edgeDetection'), switch (edgeDetection!) {
-          EdgeModifierType.none => 'none',
-          EdgeModifierType.falling => 'falling',
-          EdgeModifierType.rising => 'rising',
-        }),
+      i1.XmlAttribute(i1.XmlName('edgeDetection'), switch (edgeDetection) {
+        EdgeModifierType.none => 'none',
+        EdgeModifierType.falling => 'falling',
+        EdgeModifierType.rising => 'rising',
+      }),
     ],
     [
-      if (initialValue != null) initialValue!.toXml(),
-      if (address != null) address!.toXml(),
+      initialValue.toXml(),
+      address.toXml(),
       type.toXml(),
       if (usingDirectives != null)
         ...usingDirectives!.map((e) => i1.XmlText(e!)),
-      if (documentation != null) documentation!.toXml(),
-      if (addData != null) addData!.toXml(),
+      documentation.toXml(),
+      addData.toXml(),
     ],
   );
 }
@@ -648,16 +644,16 @@ class OutputVars implements ParameterSetItem {
   );
 }
 
-class ParameterOutputVariable extends VariableDecl {
+class ParameterOutputVariable extends i2.VariableDecl {
   final int orderWithinParamSet;
   ParameterOutputVariable({
-    super.initialValue,
-    super.address,
+    required super.initialValue,
+    required super.address,
     required super.type,
     required super.name,
     super.usingDirectives,
-    super.documentation,
-    super.addData,
+    required super.documentation,
+    required super.addData,
     required this.orderWithinParamSet,
   });
   @override
@@ -671,27 +667,27 @@ class ParameterOutputVariable extends VariableDecl {
       ),
     ],
     [
-      if (initialValue != null) initialValue!.toXml(),
-      if (address != null) address!.toXml(),
+      initialValue.toXml(),
+      address.toXml(),
       type.toXml(),
       if (usingDirectives != null)
         ...usingDirectives!.map((e) => i1.XmlText(e!)),
-      if (documentation != null) documentation!.toXml(),
-      if (addData != null) addData!.toXml(),
+      documentation.toXml(),
+      addData.toXml(),
     ],
   );
 }
 
-class VarListWithAccessSpec extends VarList {
-  final AccessSpecifiers accessSpecifier;
+class VarListWithAccessSpec extends i2.VarList {
+  final i2.AccessSpecifiers accessSpecifier;
   VarListWithAccessSpec({
     super.variables,
     super.constant,
     super.retain,
     super.nonRetain,
     super.usingDirectives,
-    super.documentation,
-    super.addData,
+    required super.documentation,
+    required super.addData,
     required this.accessSpecifier,
   });
   @override
@@ -712,55 +708,55 @@ class VarListWithAccessSpec extends VarList {
       if (variables != null) ...variables!.map((e) => e.toXml()),
       if (usingDirectives != null)
         ...usingDirectives!.map((e) => i1.XmlText(e!)),
-      if (documentation != null) documentation!.toXml(),
-      if (addData != null) addData!.toXml(),
+      documentation.toXml(),
+      addData.toXml(),
     ],
   );
 }
 
-class Body extends TextualObjectBase {
-  final List<BehaviorRepresentationBase> bodyContents;
+class Body extends i2.TextualObjectBase {
+  final List<i2.BehaviorRepresentationBase> bodyContents;
   Body({
     super.usingDirectives,
-    super.documentation,
-    super.addData,
+    required super.documentation,
+    required super.addData,
     required this.bodyContents,
   });
   @override
   i1.XmlNode toXml() => i1.XmlElement(i1.XmlName('Body'), [], [
     if (usingDirectives != null) ...usingDirectives!.map((e) => i1.XmlText(e!)),
-    if (documentation != null) documentation!.toXml(),
-    if (addData != null) addData!.toXml(),
+    documentation.toXml(),
+    addData.toXml(),
     ...bodyContents.map((e) => e.toXml()),
   ]);
 }
 
-class BodyWithoutSFC extends TextualObjectBase {
-  final List<ProgrammingLanguageBase> bodyContents;
+class BodyWithoutSFC extends i2.TextualObjectBase {
+  final List<i2.ProgrammingLanguageBase> bodyContents;
   BodyWithoutSFC({
     super.usingDirectives,
-    super.documentation,
-    super.addData,
+    required super.documentation,
+    required super.addData,
     required this.bodyContents,
   });
   @override
   i1.XmlNode toXml() => i1.XmlElement(i1.XmlName('BodyWithoutSFC'), [], [
     if (usingDirectives != null) ...usingDirectives!.map((e) => i1.XmlText(e!)),
-    if (documentation != null) documentation!.toXml(),
-    if (addData != null) addData!.toXml(),
+    documentation.toXml(),
+    addData.toXml(),
     ...bodyContents.map((e) => e.toXml()),
   ]);
 }
 
-class VarList extends TextualObjectBase {
-  final List<VariableDecl>? variables;
+class VarList extends i2.TextualObjectBase {
+  final List<i2.VariableDecl>? variables;
   final bool? constant;
   final bool? retain;
   final bool? nonRetain;
   VarList({
     super.usingDirectives,
-    super.documentation,
-    super.addData,
+    required super.documentation,
+    required super.addData,
     this.variables,
     this.constant,
     this.retain,
@@ -780,20 +776,20 @@ class VarList extends TextualObjectBase {
     [
       if (usingDirectives != null)
         ...usingDirectives!.map((e) => i1.XmlText(e!)),
-      if (documentation != null) documentation!.toXml(),
-      if (addData != null) addData!.toXml(),
+      documentation.toXml(),
+      addData.toXml(),
       if (variables != null) ...variables!.map((e) => e.toXml()),
     ],
   );
 }
 
-class ExternalVarList extends TextualObjectBase {
-  final List<VariableDeclPlain>? variables;
+class ExternalVarList extends i2.TextualObjectBase {
+  final List<i2.VariableDeclPlain>? variables;
   final bool? constant;
   ExternalVarList({
     super.usingDirectives,
-    super.documentation,
-    super.addData,
+    required super.documentation,
+    required super.addData,
     this.variables,
     this.constant,
   });
@@ -807,24 +803,24 @@ class ExternalVarList extends TextualObjectBase {
     [
       if (usingDirectives != null)
         ...usingDirectives!.map((e) => i1.XmlText(e!)),
-      if (documentation != null) documentation!.toXml(),
-      if (addData != null) addData!.toXml(),
+      documentation.toXml(),
+      addData.toXml(),
       if (variables != null) ...variables!.map((e) => e.toXml()),
     ],
   );
 }
 
-class VariableDecl extends VariableDeclPlain {
-  final Value? initialValue;
-  final AddressExpression? address;
+class VariableDecl extends i2.VariableDeclPlain {
+  final i2.Value initialValue;
+  final i2.AddressExpression address;
   VariableDecl({
     required super.type,
     required super.name,
     super.usingDirectives,
-    super.documentation,
-    super.addData,
-    this.initialValue,
-    this.address,
+    required super.documentation,
+    required super.addData,
+    required this.initialValue,
+    required this.address,
   });
   @override
   i1.XmlNode toXml() => i1.XmlElement(
@@ -834,21 +830,21 @@ class VariableDecl extends VariableDeclPlain {
       type.toXml(),
       if (usingDirectives != null)
         ...usingDirectives!.map((e) => i1.XmlText(e!)),
-      if (documentation != null) documentation!.toXml(),
-      if (addData != null) addData!.toXml(),
-      if (initialValue != null) initialValue!.toXml(),
-      if (address != null) address!.toXml(),
+      documentation.toXml(),
+      addData.toXml(),
+      initialValue.toXml(),
+      address.toXml(),
     ],
   );
 }
 
-class VariableDeclPlain extends TextualObjectBase {
-  final TypeRef type;
+class VariableDeclPlain extends i2.TextualObjectBase {
+  final i2.TypeRef type;
   final String name;
   VariableDeclPlain({
     super.usingDirectives,
-    super.documentation,
-    super.addData,
+    required super.documentation,
+    required super.addData,
     required this.type,
     required this.name,
   });
@@ -859,8 +855,8 @@ class VariableDeclPlain extends TextualObjectBase {
     [
       if (usingDirectives != null)
         ...usingDirectives!.map((e) => i1.XmlText(e!)),
-      if (documentation != null) documentation!.toXml(),
-      if (addData != null) addData!.toXml(),
+      documentation.toXml(),
+      addData.toXml(),
       type.toXml(),
     ],
   );
@@ -873,7 +869,7 @@ class TypeRef {
       i1.XmlElement(i1.XmlName('TypeRef'), [], [item.toXml()]);
 }
 
-/// Common interface for: [TypeName], [InstantlyDefinableTypeSpecBase]
+/// Common interface for: [TypeName], [ToBeResolvedLater]
 abstract interface class TypeRefItem {
   i1.XmlNode toXml();
 }
@@ -914,7 +910,7 @@ class ArrayValue implements ValueItem {
       i1.XmlElement(i1.XmlName('ArrayValue'), [], [value.toXml()]);
 }
 
-class ArrayValueItem extends Value {
+class ArrayValueItem extends i2.Value {
   final String? repetitionValue;
   ArrayValueItem({required super.item, this.repetitionValue});
   @override
@@ -936,7 +932,7 @@ class StructValue implements ValueItem {
       i1.XmlElement(i1.XmlName('StructValue'), [], [value.toXml()]);
 }
 
-class StructValueItem extends Value {
+class StructValueItem extends i2.Value {
   final String member;
   StructValueItem({required super.item, required this.member});
   @override
@@ -947,12 +943,12 @@ class StructValueItem extends Value {
   );
 }
 
-class AddressExpression extends FixedAddressExpression {
+class AddressExpression extends i2.FixedAddressExpression {
   AddressExpression({
     super.address,
     super.usingDirectives,
-    super.documentation,
-    super.addData,
+    required super.documentation,
+    required super.addData,
   });
   @override
   i1.XmlNode toXml() => i1.XmlElement(
@@ -961,18 +957,18 @@ class AddressExpression extends FixedAddressExpression {
     [
       if (usingDirectives != null)
         ...usingDirectives!.map((e) => i1.XmlText(e!)),
-      if (documentation != null) documentation!.toXml(),
-      if (addData != null) addData!.toXml(),
+      documentation.toXml(),
+      addData.toXml(),
     ],
   );
 }
 
-class FixedAddressExpression extends TextualObjectBase {
+class FixedAddressExpression extends i2.TextualObjectBase {
   final String? address;
   FixedAddressExpression({
     super.usingDirectives,
-    super.documentation,
-    super.addData,
+    required super.documentation,
+    required super.addData,
     this.address,
   });
   @override
@@ -982,21 +978,21 @@ class FixedAddressExpression extends TextualObjectBase {
     [
       if (usingDirectives != null)
         ...usingDirectives!.map((e) => i1.XmlText(e!)),
-      if (documentation != null) documentation!.toXml(),
-      if (addData != null) addData!.toXml(),
+      documentation.toXml(),
+      addData.toXml(),
     ],
   );
 }
 
-class ST extends ProgrammingLanguageBase {
+class ST extends i2.ProgrammingLanguageBase {
   final String st;
   ST({required this.st});
   @override
   i1.XmlNode toXml() => i1.XmlElement(i1.XmlName('ST'), [], [i1.XmlText(st)]);
 }
 
-class LD extends ProgrammingLanguageBase {
-  final List<LadderRung>? rungs;
+class LD extends i2.ProgrammingLanguageBase {
+  final List<i2.LadderRung>? rungs;
   LD({this.rungs});
   @override
   i1.XmlNode toXml() => i1.XmlElement(i1.XmlName('LD'), [], [
@@ -1004,13 +1000,13 @@ class LD extends ProgrammingLanguageBase {
   ]);
 }
 
-class LadderRung extends NetworkBase {
+class LadderRung extends i2.NetworkBase {
   final List<LadderRungItem>? items;
   LadderRung({
     super.label,
     required super.evaluationOrder,
-    super.documentation,
-    super.addData,
+    required super.documentation,
+    required super.addData,
     this.items,
   });
   @override
@@ -1024,38 +1020,42 @@ class LadderRung extends NetworkBase {
       ),
     ],
     [
-      if (documentation != null) documentation!.toXml(),
-      if (addData != null) addData!.toXml(),
+      documentation.toXml(),
+      addData.toXml(),
       if (items != null) ...items!.map((e) => e.toXml()),
     ],
   );
 }
 
-/// Common interface for: [CommonObjectBase], [LdObjectBase], [FbdObjectBase]
+/// Common interface for: [ToBeResolvedLater], [ToBeResolvedLater], [ToBeResolvedLater]
 abstract interface class LadderRungItem {
   i1.XmlNode toXml();
 }
 
-class Comment extends CommonObjectBase {
-  final TextBase content;
-  Comment({super.documentation, super.addData, required this.content});
+class Comment extends i2.CommonObjectBase {
+  final i2.TextBase content;
+  Comment({
+    required super.documentation,
+    required super.addData,
+    required this.content,
+  });
   @override
   i1.XmlNode toXml() => i1.XmlElement(i1.XmlName('Comment'), [], [
-    if (documentation != null) documentation!.toXml(),
-    if (addData != null) addData!.toXml(),
+    documentation.toXml(),
+    addData.toXml(),
     content.toXml(),
   ]);
 }
 
-class Block extends FbdObjectBase {
+class Block extends i2.FbdObjectBase {
   final InOutVariables? inOutVariables;
   final InputVariables? inputVariables;
   final OutputVariables? outputVariables;
   final String typeName;
   final String? instanceName;
   Block({
-    super.documentation,
-    super.addData,
+    required super.documentation,
+    required super.addData,
     this.inOutVariables,
     this.inputVariables,
     this.outputVariables,
@@ -1071,8 +1071,8 @@ class Block extends FbdObjectBase {
         i1.XmlAttribute(i1.XmlName('instanceName'), instanceName!),
     ],
     [
-      if (documentation != null) documentation!.toXml(),
-      if (addData != null) addData!.toXml(),
+      documentation.toXml(),
+      addData.toXml(),
       if (inOutVariables != null) inOutVariables!.toXml(),
       if (inputVariables != null) inputVariables!.toXml(),
       if (outputVariables != null) outputVariables!.toXml(),
@@ -1088,16 +1088,16 @@ class InOutVariables {
   ]);
 }
 
-class InOutVariable extends IdentifiedObjectBase {
-  final ConnectionPointIn? connectionPointIn;
-  final ConnectionPointOut? connectionPointOut;
+class InOutVariable extends i2.IdentifiedObjectBase {
+  final i2.ConnectionPointIn connectionPointIn;
+  final i2.ConnectionPointOut connectionPointOut;
   final String parameterName;
   final bool? negated;
   InOutVariable({
-    super.documentation,
-    super.addData,
-    this.connectionPointIn,
-    this.connectionPointOut,
+    required super.documentation,
+    required super.addData,
+    required this.connectionPointIn,
+    required this.connectionPointOut,
     required this.parameterName,
     this.negated,
   });
@@ -1110,10 +1110,10 @@ class InOutVariable extends IdentifiedObjectBase {
         i1.XmlAttribute(i1.XmlName('negated'), negated!.toString()),
     ],
     [
-      if (documentation != null) documentation!.toXml(),
-      if (addData != null) addData!.toXml(),
-      if (connectionPointIn != null) connectionPointIn!.toXml(),
-      if (connectionPointOut != null) connectionPointOut!.toXml(),
+      documentation.toXml(),
+      addData.toXml(),
+      connectionPointIn.toXml(),
+      connectionPointOut.toXml(),
     ],
   );
 }
@@ -1126,19 +1126,19 @@ class InputVariables {
   ]);
 }
 
-class InputVariable extends IdentifiedObjectBase {
-  final ConnectionPointIn? connectionPointIn;
+class InputVariable extends i2.IdentifiedObjectBase {
+  final i2.ConnectionPointIn connectionPointIn;
   final String parameterName;
   final bool? negated;
-  final EdgeModifierType? edge;
+  final i2.EdgeModifierType edge;
   final bool? suppressName;
   InputVariable({
-    super.documentation,
-    super.addData,
-    this.connectionPointIn,
+    required super.documentation,
+    required super.addData,
+    required this.connectionPointIn,
     required this.parameterName,
     this.negated,
-    this.edge,
+    required this.edge,
     this.suppressName,
   });
   @override
@@ -1148,20 +1148,15 @@ class InputVariable extends IdentifiedObjectBase {
       i1.XmlAttribute(i1.XmlName('parameterName'), parameterName),
       if (negated != null)
         i1.XmlAttribute(i1.XmlName('negated'), negated!.toString()),
-      if (edge != null)
-        i1.XmlAttribute(i1.XmlName('edge'), switch (edge!) {
-          EdgeModifierType.none => 'none',
-          EdgeModifierType.falling => 'falling',
-          EdgeModifierType.rising => 'rising',
-        }),
+      i1.XmlAttribute(i1.XmlName('edge'), switch (edge) {
+        EdgeModifierType.none => 'none',
+        EdgeModifierType.falling => 'falling',
+        EdgeModifierType.rising => 'rising',
+      }),
       if (suppressName != null)
         i1.XmlAttribute(i1.XmlName('suppressName'), suppressName!.toString()),
     ],
-    [
-      if (documentation != null) documentation!.toXml(),
-      if (addData != null) addData!.toXml(),
-      if (connectionPointIn != null) connectionPointIn!.toXml(),
-    ],
+    [documentation.toXml(), addData.toXml(), connectionPointIn.toXml()],
   );
 }
 
@@ -1173,15 +1168,15 @@ class OutputVariables {
   ]);
 }
 
-class OutputVariable extends IdentifiedObjectBase {
-  final ConnectionPointOut? connectionPointOut;
+class OutputVariable extends i2.IdentifiedObjectBase {
+  final i2.ConnectionPointOut connectionPointOut;
   final String parameterName;
   final bool? negated;
   final bool? suppressName;
   OutputVariable({
-    super.documentation,
-    super.addData,
-    this.connectionPointOut,
+    required super.documentation,
+    required super.addData,
+    required this.connectionPointOut,
     required this.parameterName,
     this.negated,
     this.suppressName,
@@ -1196,115 +1191,107 @@ class OutputVariable extends IdentifiedObjectBase {
       if (suppressName != null)
         i1.XmlAttribute(i1.XmlName('suppressName'), suppressName!.toString()),
     ],
-    [
-      if (documentation != null) documentation!.toXml(),
-      if (addData != null) addData!.toXml(),
-      if (connectionPointOut != null) connectionPointOut!.toXml(),
-    ],
+    [documentation.toXml(), addData.toXml(), connectionPointOut.toXml()],
   );
 }
 
-class DataSource extends FbdObjectBase {
-  final ConnectionPointOut? connectionPointOut;
+class DataSource extends i2.FbdObjectBase {
+  final i2.ConnectionPointOut connectionPointOut;
   final String identifier;
   DataSource({
-    super.documentation,
-    super.addData,
-    this.connectionPointOut,
+    required super.documentation,
+    required super.addData,
+    required this.connectionPointOut,
     required this.identifier,
   });
   @override
   i1.XmlNode toXml() => i1.XmlElement(
     i1.XmlName('DataSource'),
     [i1.XmlAttribute(i1.XmlName('identifier'), identifier)],
-    [
-      if (documentation != null) documentation!.toXml(),
-      if (addData != null) addData!.toXml(),
-      if (connectionPointOut != null) connectionPointOut!.toXml(),
-    ],
+    [documentation.toXml(), addData.toXml(), connectionPointOut.toXml()],
   );
 }
 
-class DataSink extends FbdObjectBase {
-  final ConnectionPointIn? connectionPointIn;
+class DataSink extends i2.FbdObjectBase {
+  final i2.ConnectionPointIn connectionPointIn;
   final String identifier;
   DataSink({
-    super.documentation,
-    super.addData,
-    this.connectionPointIn,
+    required super.documentation,
+    required super.addData,
+    required this.connectionPointIn,
     required this.identifier,
   });
   @override
   i1.XmlNode toXml() => i1.XmlElement(
     i1.XmlName('DataSink'),
     [i1.XmlAttribute(i1.XmlName('identifier'), identifier)],
-    [
-      if (documentation != null) documentation!.toXml(),
-      if (addData != null) addData!.toXml(),
-      if (connectionPointIn != null) connectionPointIn!.toXml(),
-    ],
+    [documentation.toXml(), addData.toXml(), connectionPointIn.toXml()],
   );
 }
 
-class Jump extends FbdObjectBase {
-  final ConnectionPointIn? connectionPointIn;
+class Jump extends i2.FbdObjectBase {
+  final i2.ConnectionPointIn connectionPointIn;
   final String targetNetworkLabel;
   Jump({
-    super.documentation,
-    super.addData,
-    this.connectionPointIn,
+    required super.documentation,
+    required super.addData,
+    required this.connectionPointIn,
     required this.targetNetworkLabel,
   });
   @override
   i1.XmlNode toXml() => i1.XmlElement(
     i1.XmlName('Jump'),
     [i1.XmlAttribute(i1.XmlName('targetNetworkLabel'), targetNetworkLabel)],
-    [
-      if (documentation != null) documentation!.toXml(),
-      if (addData != null) addData!.toXml(),
-      if (connectionPointIn != null) connectionPointIn!.toXml(),
-    ],
+    [documentation.toXml(), addData.toXml(), connectionPointIn.toXml()],
   );
 }
 
-class LeftPowerRail extends LdObjectBase {
-  final List<ConnectionPointOut>? connectionPointOuts;
-  LeftPowerRail({super.documentation, super.addData, this.connectionPointOuts});
+class LeftPowerRail extends i2.LdObjectBase {
+  final List<i2.ConnectionPointOut>? connectionPointOuts;
+  LeftPowerRail({
+    required super.documentation,
+    required super.addData,
+    this.connectionPointOuts,
+  });
   @override
   i1.XmlNode toXml() => i1.XmlElement(i1.XmlName('LeftPowerRail'), [], [
-    if (documentation != null) documentation!.toXml(),
-    if (addData != null) addData!.toXml(),
+    documentation.toXml(),
+    addData.toXml(),
     if (connectionPointOuts != null)
       ...connectionPointOuts!.map((e) => e.toXml()),
   ]);
 }
 
-class RightPowerRail extends LdObjectBase {
-  final List<ConnectionPointIn>? connectionPointIns;
-  RightPowerRail({super.documentation, super.addData, this.connectionPointIns});
+class RightPowerRail extends i2.LdObjectBase {
+  final List<i2.ConnectionPointIn>? connectionPointIns;
+  RightPowerRail({
+    required super.documentation,
+    required super.addData,
+    this.connectionPointIns,
+  });
   @override
   i1.XmlNode toXml() => i1.XmlElement(i1.XmlName('RightPowerRail'), [], [
-    if (documentation != null) documentation!.toXml(),
-    if (addData != null) addData!.toXml(),
+    documentation.toXml(),
+    addData.toXml(),
     if (connectionPointIns != null)
       ...connectionPointIns!.map((e) => e.toXml()),
   ]);
 }
 
-class Coil extends LdObjectBase {
-  final ConnectionPointIn? connectionPointIn;
-  final ConnectionPointOut? connectionPointOut;
+class Coil extends i2.LdObjectBase {
+  final i2.ConnectionPointIn connectionPointIn;
+  final i2.ConnectionPointOut connectionPointOut;
   final bool? negated;
-  final EdgeModifierType? edge;
+  final i2.EdgeModifierType edge;
   final Latch? latch;
   final String operand;
   Coil({
-    super.documentation,
-    super.addData,
-    this.connectionPointIn,
-    this.connectionPointOut,
+    required super.documentation,
+    required super.addData,
+    required this.connectionPointIn,
+    required this.connectionPointOut,
     this.negated,
-    this.edge,
+    required this.edge,
     this.latch,
     required this.operand,
   });
@@ -1314,12 +1301,11 @@ class Coil extends LdObjectBase {
     [
       if (negated != null)
         i1.XmlAttribute(i1.XmlName('negated'), negated!.toString()),
-      if (edge != null)
-        i1.XmlAttribute(i1.XmlName('edge'), switch (edge!) {
-          EdgeModifierType.none => 'none',
-          EdgeModifierType.falling => 'falling',
-          EdgeModifierType.rising => 'rising',
-        }),
+      i1.XmlAttribute(i1.XmlName('edge'), switch (edge) {
+        EdgeModifierType.none => 'none',
+        EdgeModifierType.falling => 'falling',
+        EdgeModifierType.rising => 'rising',
+      }),
       if (latch != null)
         i1.XmlAttribute(i1.XmlName('latch'), switch (latch!) {
           Latch.none => 'none',
@@ -1329,27 +1315,27 @@ class Coil extends LdObjectBase {
       i1.XmlAttribute(i1.XmlName('operand'), operand),
     ],
     [
-      if (documentation != null) documentation!.toXml(),
-      if (addData != null) addData!.toXml(),
-      if (connectionPointIn != null) connectionPointIn!.toXml(),
-      if (connectionPointOut != null) connectionPointOut!.toXml(),
+      documentation.toXml(),
+      addData.toXml(),
+      connectionPointIn.toXml(),
+      connectionPointOut.toXml(),
     ],
   );
 }
 
-class Contact extends LdObjectBase {
-  final ConnectionPointIn? connectionPointIn;
-  final ConnectionPointOut? connectionPointOut;
+class Contact extends i2.LdObjectBase {
+  final i2.ConnectionPointIn connectionPointIn;
+  final i2.ConnectionPointOut connectionPointOut;
   final bool? negated;
-  final EdgeModifierType? edge;
+  final i2.EdgeModifierType edge;
   final String operand;
   Contact({
-    super.documentation,
-    super.addData,
-    this.connectionPointIn,
-    this.connectionPointOut,
+    required super.documentation,
+    required super.addData,
+    required this.connectionPointIn,
+    required this.connectionPointOut,
     this.negated,
-    this.edge,
+    required this.edge,
     required this.operand,
   });
   @override
@@ -1358,39 +1344,42 @@ class Contact extends LdObjectBase {
     [
       if (negated != null)
         i1.XmlAttribute(i1.XmlName('negated'), negated!.toString()),
-      if (edge != null)
-        i1.XmlAttribute(i1.XmlName('edge'), switch (edge!) {
-          EdgeModifierType.none => 'none',
-          EdgeModifierType.falling => 'falling',
-          EdgeModifierType.rising => 'rising',
-        }),
+      i1.XmlAttribute(i1.XmlName('edge'), switch (edge) {
+        EdgeModifierType.none => 'none',
+        EdgeModifierType.falling => 'falling',
+        EdgeModifierType.rising => 'rising',
+      }),
       i1.XmlAttribute(i1.XmlName('operand'), operand),
     ],
     [
-      if (documentation != null) documentation!.toXml(),
-      if (addData != null) addData!.toXml(),
-      if (connectionPointIn != null) connectionPointIn!.toXml(),
-      if (connectionPointOut != null) connectionPointOut!.toXml(),
+      documentation.toXml(),
+      addData.toXml(),
+      connectionPointIn.toXml(),
+      connectionPointOut.toXml(),
     ],
   );
 }
 
-class ConnectionPointIn extends IdentifiedObjectBase {
-  final List<Connection>? connections;
-  ConnectionPointIn({super.documentation, super.addData, this.connections});
+class ConnectionPointIn extends i2.IdentifiedObjectBase {
+  final List<i2.Connection>? connections;
+  ConnectionPointIn({
+    required super.documentation,
+    required super.addData,
+    this.connections,
+  });
   @override
   i1.XmlNode toXml() => i1.XmlElement(i1.XmlName('ConnectionPointIn'), [], [
-    if (documentation != null) documentation!.toXml(),
-    if (addData != null) addData!.toXml(),
+    documentation.toXml(),
+    addData.toXml(),
     if (connections != null) ...connections!.map((e) => e.toXml()),
   ]);
 }
 
-class Connection extends IdentifiedObjectBase {
+class Connection extends i2.IdentifiedObjectBase {
   final int refConnectionPointOutId;
   Connection({
-    super.documentation,
-    super.addData,
+    required super.documentation,
+    required super.addData,
     required this.refConnectionPointOutId,
   });
   @override
@@ -1402,18 +1391,15 @@ class Connection extends IdentifiedObjectBase {
         refConnectionPointOutId.toString(),
       ),
     ],
-    [
-      if (documentation != null) documentation!.toXml(),
-      if (addData != null) addData!.toXml(),
-    ],
+    [documentation.toXml(), addData.toXml()],
   );
 }
 
-class ConnectionPointOut extends IdentifiedObjectBase {
+class ConnectionPointOut extends i2.IdentifiedObjectBase {
   final int connectionPointOutId;
   ConnectionPointOut({
-    super.documentation,
-    super.addData,
+    required super.documentation,
+    required super.addData,
     required this.connectionPointOutId,
   });
   @override
@@ -1425,10 +1411,7 @@ class ConnectionPointOut extends IdentifiedObjectBase {
         connectionPointOutId.toString(),
       ),
     ],
-    [
-      if (documentation != null) documentation!.toXml(),
-      if (addData != null) addData!.toXml(),
-    ],
+    [documentation.toXml(), addData.toXml()],
   );
 }
 
@@ -1466,7 +1449,7 @@ abstract class TextBase {
   i1.XmlNode toXml();
 }
 
-class SimpleText extends TextBase {
+class SimpleText extends i2.TextBase {
   @override
   i1.XmlNode toXml() => i1.XmlElement(i1.XmlName('SimpleText'), [], []);
 }
@@ -1476,35 +1459,43 @@ enum Latch {
   set$,
   reset;
 
-  i1.XmlNode toXml() => switch (this) {
-    Latch.none => i1.XmlText('none'),
-    Latch.set$ => i1.XmlText('set'),
-    Latch.reset => i1.XmlText('reset'),
-  };
+  i1.XmlNode toXml() => i1.XmlElement(i1.XmlName('latch'), [], [
+    switch (this) {
+      Latch.none => i1.XmlText('none'),
+      Latch.set$ => i1.XmlText('set'),
+      Latch.reset => i1.XmlText('reset'),
+    },
+  ]);
 }
 
 enum HandleUnknown {
   discard;
 
-  i1.XmlNode toXml() => switch (this) {
-    HandleUnknown.discard => i1.XmlText('discard'),
-  };
+  i1.XmlNode toXml() => i1.XmlElement(i1.XmlName('handleUnknown'), [], [
+    switch (this) {
+      HandleUnknown.discard => i1.XmlText('discard'),
+    },
+  ]);
 }
 
 enum ElementaryType {
   dint;
 
-  i1.XmlNode toXml() => switch (this) {
-    ElementaryType.dint => i1.XmlText('DINT'),
-  };
+  i1.XmlNode toXml() => i1.XmlElement(i1.XmlName('ElementaryType'), [], [
+    switch (this) {
+      ElementaryType.dint => i1.XmlText('DINT'),
+    },
+  ]);
 }
 
 enum AccessSpecifiers {
   private;
 
-  i1.XmlNode toXml() => switch (this) {
-    AccessSpecifiers.private => i1.XmlText('private'),
-  };
+  i1.XmlNode toXml() => i1.XmlElement(i1.XmlName('AccessSpecifiers'), [], [
+    switch (this) {
+      AccessSpecifiers.private => i1.XmlText('private'),
+    },
+  ]);
 }
 
 enum EdgeModifierType {
@@ -1512,9 +1503,11 @@ enum EdgeModifierType {
   falling,
   rising;
 
-  i1.XmlNode toXml() => switch (this) {
-    EdgeModifierType.none => i1.XmlText('none'),
-    EdgeModifierType.falling => i1.XmlText('falling'),
-    EdgeModifierType.rising => i1.XmlText('rising'),
-  };
+  i1.XmlNode toXml() => i1.XmlElement(i1.XmlName('EdgeModifierType'), [], [
+    switch (this) {
+      EdgeModifierType.none => i1.XmlText('none'),
+      EdgeModifierType.falling => i1.XmlText('falling'),
+      EdgeModifierType.rising => i1.XmlText('rising'),
+    },
+  ]);
 }

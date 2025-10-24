@@ -6,6 +6,7 @@ import 'package:xsd_to_dart_code/internal_converter/dart_code/library.dart';
 import 'package:xsd_to_dart_code/internal_converter/dart_code/type.dart';
 import 'package:xsd_to_dart_code/internal_converter/internal_converter.dart';
 import 'package:xsd_to_dart_code/internal_converter/xsd/name.dart';
+import 'package:xsd_to_dart_code/internal_converter/xsd/schema.dart';
 import 'package:xsd_to_dart_code/logger/logger.dart';
 
 /// This class is a placeholder for a class that needs to be post-processed
@@ -232,15 +233,25 @@ ClassFromXsd findClass(
   TypeFromXsdReference classToFind,
   List<LibraryFromXsd> libraries,
 ) {
-  var nameSpaceUri = classToFind.namespaceUri;
+  var xsdElement = classToFind.xsdElement;
+  var typeAttribute =
+      xsdElement.getAttribute('type') ?? xsdElement.getAttribute('base') ?? '';
+  var nameSpacePrefix = typeAttribute.contains(':')
+      ? typeAttribute.split(':').first
+      : '';
+  var schema = Schema.findAsParentOf(xsdElement);
+  var nameSpaceUri = schema.findNameSpaceUri(nameSpacePrefix);
+  if (nameSpaceUri == null) {
+    log.warning('Could not find namespace URI for prefix: $nameSpacePrefix');
+    return ClassFromXsd('Unknown', xsdElement: xsdElement);
+  }
   var library = findLibrary(libraries, nameSpaceUri);
   var foundClass = (library.classes ?? []).firstWhereOrNull(
     (c) => c.name.toString() == classToFind.name,
   );
   if (foundClass == null) {
     log.warning('Could not find class: ${classToFind.name}');
-    return library.classes?.first
-        as ClassFromXsd; //FIXME remove this temporary fix
+    return ClassFromXsd('Unknown', xsdElement: xsdElement);
   }
   return foundClass as ClassFromXsd;
 }

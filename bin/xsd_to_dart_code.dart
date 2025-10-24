@@ -19,8 +19,6 @@ void main(List<String> arguments) {
       .map((xsdFile) => Schema.fromFile(xsdFile))
       .toList();
 
-  // var xsdFile = File(r'xsd\IEC61131_10_Ed1_0_Spc1_0.xsd');
-  // var schema = Schema.fromFile(xsdFile);
   var generator = XsdToDartGenerator(
     outputPathConverter: CustomizedOutputPathConverter(),
     namePathMapper: CustomizedNamePathMapper(),

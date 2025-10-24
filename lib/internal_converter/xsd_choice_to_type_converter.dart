@@ -61,11 +61,11 @@ class XsdChoiceToTypeConverter implements XsdToDarConverter {
       return field.type;
     }
     var fieldTypeConverter = internalConverter.simpleTypeConverters
-        .findForXsdType(fieldTypeExpression!.split(':').last);
+        .findForXsdType(fieldTypeExpression.split(':').last);
     if (fieldTypeConverter == null) {
       return field.type;
     }
-    var fieldType = fieldTypeConverter!.dartType;
+    var fieldType = fieldTypeConverter.dartType;
 
     var className = findTypeName(internalConverter.namePathMapper, xsdElement);
     var fields = [createField(xsdElement, fieldType)];

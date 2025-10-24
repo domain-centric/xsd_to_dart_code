@@ -20,14 +20,6 @@ class WriteResultToFile implements XsdToDartGeneratorStep {
   }
 }
 
-File dartFile(OutputPathConverter outputPathConverter, LibraryFromXsd library) {
-  var dartFile = outputPathConverter.convertToDartFile(library.schema.xsdFile);
-  if (library.fileNameConverter != null) {
-    dartFile = library.fileNameConverter!(dartFile);
-  }
-  return dartFile;
-}
-
 abstract class OutputPathConverter {
   /// creates the output path (not the file contents)
   File convertToDartFile(File xsdFile);
@@ -61,4 +53,12 @@ class DefaultOutputPathConverter implements OutputPathConverter {
 
   String normalizeFileName(String xsdFileName) =>
       xsdFileName.replaceAll('.', '').toLowerCase();
+}
+
+File dartFile(OutputPathConverter outputPathConverter, LibraryFromXsd library) {
+  var dartFile = outputPathConverter.convertToDartFile(library.schema.xsdFile);
+  if (library.fileNameConverter != null) {
+    dartFile = library.fileNameConverter!(dartFile);
+  }
+  return dartFile;
 }

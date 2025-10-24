@@ -20,6 +20,28 @@ class FieldFromXsd extends Field implements HasTypeCode {
     required this.xsdElement,
   });
 
+  FieldFromXsd copyWith({
+    String? name,
+    List<DocComment>? docComments,
+    List<Annotation>? annotations,
+    bool? isStatic,
+    Modifier? modifier,
+    Type? type,
+    dynamic value,
+    XmlElement? xsdElement,
+  }) {
+    return FieldFromXsd(
+      name ?? this.name,
+      docComments: docComments ?? this.docComments,
+      annotations: annotations ?? this.annotations,
+      static: isStatic ?? this.static,
+      modifier: modifier ?? this.modifier,
+      type: type ?? this.type,
+      value: value ?? this.value,
+      xsdElement: xsdElement ?? this.xsdElement,
+    );
+  }
+
   late final fieldSource = FieldSource.of(xsdElement);
 
   @override
